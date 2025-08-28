@@ -12,10 +12,11 @@ import {
   CreateAtomicSystemData,
   UpdateAtomicSystemData
 } from '@atomic/shared'
+import env from '../config/env'
 
 // Create axios instance
 const api: AxiosInstance = axios.create({
-  baseURL: '/api/v1',
+  baseURL: env.API_URL,
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
@@ -83,7 +84,7 @@ api.interceptors.response.use(
       !originalRequest.url?.includes('/auth/login')
     ) {
       try {
-        const response = await axios.post('/api/v1/auth/refresh', {
+        const response = await axios.post(`${env.API_URL}/auth/refresh`, {
           refreshToken: refreshToken,
         })
 
