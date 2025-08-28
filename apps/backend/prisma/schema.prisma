@@ -1,0 +1,146 @@
+// Atomic Systems Database Schema
+// Based on Atomic Habits methodology: Identity > Systems > Habits
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model - Core authentication and profile
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  isActive  Boolean  @default(true)
+  isPremium Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  identityAreas IdentityArea[]
+  systems       AtomicSystem[]
+  executions    SystemExecution[]
+  refreshTokens RefreshToken[]
+
+  @@index([email])
+  @@index([isActive])
+  @@map("users")
+}
+
+// Refresh tokens for JWT authentication
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  // Relationships
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+// Identity Areas - "I am someone who..." (Core of atomic habits)
+model IdentityArea {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String   // e.g., "Healthy Person", "Productive Professional"
+  description String?
+  color       String   @default("#3B82F6") // Hex color for UI
+  isActive    Boolean  @default(true)
+  order       Int      @default(0) // Display order
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  user    User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  systems AtomicSystem[]
+
+  @@unique([userId, name])
+  @@index([userId, isActive])
+  @@index([userId, order])
+  @@map("identity_areas")
+}
+
+// Atomic Systems - Systematized habits based on the 4 Laws
+model AtomicSystem {
+  id             String   @id @default(cuid())
+  userId         String
+  identityAreaId String
+  name           String   // e.g., "Morning Workout System"
+  description    String?
+  
+  // The 4 Laws of Atomic Habits
+  cue      String // 1st Law: Make it Obvious - "After I wake up..."
+  craving  String // 2nd Law: Make it Attractive - "I will feel..."
+  response String // 3rd Law: Make it Easy - "I will do..."
+  reward   String // 4th Law: Make it Satisfying - "I will celebrate by..."
+  
+  // System configuration
+  frequency    SystemFrequency @default(DAILY)
+  timeOfDay    String?         // e.g., "morning", "afternoon", "evening"
+  estimatedMin Int?            // Estimated minutes to complete
+  difficulty   Int             @default(3) // 1-5 scale
+  
+  isActive  Boolean @default(true)
+  order     Int     @default(0) // Display order within identity area
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  identityArea IdentityArea      @relation(fields: [identityAreaId], references: [id], onDelete: Cascade)
+  executions   SystemExecution[]
+
+  @@unique([userId, name])
+  @@index([userId, isActive])
+  @@index([identityAreaId, isActive])
+  @@index([userId, order])
+  @@map("atomic_systems")
+}
+
+// System executions - Track when systems are performed
+model SystemExecution {
+  id       String   @id @default(cuid())
+  systemId String
+  userId   String
+  
+  executedAt DateTime @default(now())
+  quality    Int      @default(3) // 1-5 scale (1=poor, 5=excellent)
+  notes      String?
+  
+  // Identity reinforcement tracking
+  strengthensIdentity Boolean @default(true) // Did this strengthen your identity?
+  
+  // Context tracking (optional)
+  mood     String? // e.g., "great", "good", "neutral", "poor"
+  energy   String? // e.g., "high", "medium", "low"
+  location String? // e.g., "home", "gym", "office"
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  system AtomicSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
+  user   User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, executedAt])
+  @@index([systemId, executedAt])
+  @@index([executedAt])
+  @@map("system_executions")
+}
+
+// Enums
+enum SystemFrequency {
+  DAILY
+  WEEKLY
+  CUSTOM
+}
