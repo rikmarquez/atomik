@@ -1,0 +1,104 @@
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import compression from 'compression';
+import rateLimit from 'express-rate-limit';
+import dotenv from 'dotenv';
+
+import { errorHandler, notFound } from './middleware/error';
+import { validateEnv } from './utils/validation';
+import healthRoutes from './routes/health';
+import authRoutes from './routes/auth';
+import identityAreasRoutes from './routes/identityAreas';
+import atomicSystemsRoutes from './routes/atomicSystems';
+
+// Load environment variables
+dotenv.config();
+
+// Validate environment variables
+validateEnv();
+
+const app = express();
+const PORT = process.env.PORT || 3001;
+
+// Security middleware
+app.use(helmet());
+app.use(compression());
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: process.env.NODE_ENV === 'production' ? 100 : 1000, // limit each IP
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use(limiter);
+
+// CORS configuration
+const corsOrigins = process.env.CORS_ORIGINS?.split(',') || ['http://localhost:3000'];
+app.use(cors({
+  origin: corsOrigins,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+}));
+
+// Body parsing middleware
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Logging middleware
+if (process.env.NODE_ENV !== 'test') {
+  app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+}
+
+// API Routes
+app.use('/api/v1/health', healthRoutes);
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/identity-areas', identityAreasRoutes);
+app.use('/api/v1/atomic-systems', atomicSystemsRoutes);
+
+// API documentation (development only)
+if (process.env.NODE_ENV === 'development' && process.env.ENABLE_API_DOCS === 'true') {
+  app.get('/api/v1/docs', (req, res) => {
+    res.json({
+      message: 'Atomic Systems API Documentation',
+      version: '1.0.0',
+      endpoints: {
+        health: {
+          'GET /api/v1/health': 'Check API health status'
+        },
+        auth: {
+          'POST /api/v1/auth/register': 'Register new user',
+          'POST /api/v1/auth/login': 'Login user',
+          'POST /api/v1/auth/refresh': 'Refresh access token',
+          'POST /api/v1/auth/logout': 'Logout user',
+          'GET /api/v1/auth/profile': 'Get user profile (protected)'
+        }
+      }
+    });
+  });
+}
+
+// 404 handler
+app.use(notFound);
+
+// Global error handler
+app.use(errorHandler);
+
+// Start server
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`🚀 Atomic Systems API running on port ${PORT}`);
+    console.log(`📚 Environment: ${process.env.NODE_ENV}`);
+    console.log(`🗄️ Database: Connected to PostgreSQL`);
+    
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`📖 API Docs: http://localhost:${PORT}/api/v1/docs`);
+    }
+  });
+}
+
+export default app;

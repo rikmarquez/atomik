@@ -1,7 +1,26 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(npm install)",
+      "Bash(npx prisma generate:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npx prisma migrate dev:*)",
+      "Bash(curl:*)",
+      "Bash(npm create:*)",
+      "Bash(ping:*)",
+      "Bash(telnet:*)",
+      "Bash(nc:*)",
+      "Bash(node:*)",
+      "Bash(npx prisma db push:*)",
+      "Bash(taskkill:*)",
+      "Bash(cmd //c taskkill:*)",
+      "Bash(timeout:*)",
+      "Bash(PORT=3005 npm run dev)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []
