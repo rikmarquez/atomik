@@ -95,6 +95,7 @@ if (process.env.NODE_ENV !== 'test') {
     console.log(`🚀 Atomic Systems API running on port ${PORT}`);
     console.log(`📚 Environment: ${process.env.NODE_ENV}`);
     console.log(`🗄️ Database: Connected to PostgreSQL`);
+    console.log(`🔄 CORS Debug - Origins: ${JSON.stringify(corsOrigins)}`);
     
     if (process.env.NODE_ENV === 'development') {
       console.log(`📖 API Docs: http://localhost:${PORT}/api/v1/docs`);

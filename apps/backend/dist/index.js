@@ -36,6 +36,7 @@ const limiter = (0, express_rate_limit_1.default)({
 app.use(limiter);
 // CORS configuration
 const corsOrigins = process.env.CORS_ORIGINS?.split(',') || ['http://localhost:3000'];
+console.log('🌐 CORS Origins:', corsOrigins); // Debug CORS
 app.use((0, cors_1.default)({
     origin: corsOrigins,
     credentials: true,
