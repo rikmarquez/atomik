@@ -14,6 +14,8 @@ const error_1 = require("./middleware/error");
 const validation_1 = require("./utils/validation");
 const health_1 = __importDefault(require("./routes/health"));
 const auth_1 = __importDefault(require("./routes/auth"));
+const identityAreas_1 = __importDefault(require("./routes/identityAreas"));
+const atomicSystems_1 = __importDefault(require("./routes/atomicSystems"));
 // Load environment variables
 dotenv_1.default.config();
 // Validate environment variables
@@ -50,6 +52,8 @@ if (process.env.NODE_ENV !== 'test') {
 // API Routes
 app.use('/api/v1/health', health_1.default);
 app.use('/api/v1/auth', auth_1.default);
+app.use('/api/v1/identity-areas', identityAreas_1.default);
+app.use('/api/v1/atomic-systems', atomicSystems_1.default);
 // API documentation (development only)
 if (process.env.NODE_ENV === 'development' && process.env.ENABLE_API_DOCS === 'true') {
     app.get('/api/v1/docs', (req, res) => {

@@ -94,6 +94,16 @@ export interface SystemExecution {
   strengthensIdentity: boolean; // Did this action strengthen your identity?
 }
 
+// Express Request extension
+import { Request } from 'express';
+
+export interface AuthenticatedRequest extends Request {
+  user: {
+    id: string;
+    type: string;
+  };
+}
+
 // API Response types
 export interface ApiResponse<T = any> {
   success: boolean;

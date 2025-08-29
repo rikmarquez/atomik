@@ -1,9 +1,0 @@
-[phases.build]
-cmds = [
-  "npm ci --production=false",
-  "npx prisma generate",
-  "npm run build"
-]
-
-[start]
-cmd = "npm start"

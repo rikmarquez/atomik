@@ -26,7 +26,7 @@ const updateAtomicSystemSchema = createAtomicSystemSchema.partial().omit({ ident
 /**
  * Get all atomic systems for the authenticated user
  */
-export const getAtomicSystems = async (req: any, res: Response) => {
+export const getAtomicSystems = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id
     const { identityAreaId } = req.query
@@ -84,7 +84,7 @@ export const getAtomicSystems = async (req: any, res: Response) => {
 /**
  * Get a single atomic system by ID
  */
-export const getAtomicSystem = async (req: any, res: Response) => {
+export const getAtomicSystem = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id
     const { id } = req.params
@@ -148,7 +148,7 @@ export const getAtomicSystem = async (req: any, res: Response) => {
 /**
  * Create a new atomic system
  */
-export const createAtomicSystem = async (req: any, res: Response) => {
+export const createAtomicSystem = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id
 
@@ -263,7 +263,7 @@ export const createAtomicSystem = async (req: any, res: Response) => {
 /**
  * Update an atomic system
  */
-export const updateAtomicSystem = async (req: any, res: Response) => {
+export const updateAtomicSystem = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id
     const { id } = req.params
@@ -358,7 +358,7 @@ export const updateAtomicSystem = async (req: any, res: Response) => {
 /**
  * Delete an atomic system (soft delete)
  */
-export const deleteAtomicSystem = async (req: any, res: Response) => {
+export const deleteAtomicSystem = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id
     const { id } = req.params
@@ -406,7 +406,7 @@ export const deleteAtomicSystem = async (req: any, res: Response) => {
 /**
  * Execute/complete an atomic system
  */
-export const executeAtomicSystem = async (req: any, res: Response) => {
+export const executeAtomicSystem = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id
     const { id } = req.params

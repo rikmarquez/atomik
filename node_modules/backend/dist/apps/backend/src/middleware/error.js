@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.errorHandler = exports.notFound = exports.AppError = void 0;
-const shared_1 = require("@atomic/shared");
+const utils_1 = require("../types/utils");
 // Custom error class
 class AppError extends Error {
     statusCode;
     code;
     isOperational;
-    constructor(message, statusCode = shared_1.HTTP_STATUS.INTERNAL_SERVER_ERROR, code = 'INTERNAL_ERROR') {
+    constructor(message, statusCode = utils_1.HTTP_STATUS.INTERNAL_SERVER_ERROR, code = 'INTERNAL_ERROR') {
         super(message);
         this.statusCode = statusCode;
         this.code = code;
@@ -18,13 +18,13 @@ class AppError extends Error {
 exports.AppError = AppError;
 // 404 handler
 const notFound = (req, res, next) => {
-    const error = new AppError(`Route ${req.originalUrl} not found`, shared_1.HTTP_STATUS.NOT_FOUND, 'ROUTE_NOT_FOUND');
+    const error = new AppError(`Route ${req.originalUrl} not found`, utils_1.HTTP_STATUS.NOT_FOUND, 'ROUTE_NOT_FOUND');
     next(error);
 };
 exports.notFound = notFound;
 // Global error handler
 const errorHandler = (error, req, res, next) => {
-    let statusCode = shared_1.HTTP_STATUS.INTERNAL_SERVER_ERROR;
+    let statusCode = utils_1.HTTP_STATUS.INTERNAL_SERVER_ERROR;
     let code = 'INTERNAL_ERROR';
     let message = 'Internal server error';
     let details = undefined;
@@ -39,18 +39,18 @@ const errorHandler = (error, req, res, next) => {
         const prismaError = error;
         switch (prismaError.code) {
             case 'P2002':
-                statusCode = shared_1.HTTP_STATUS.CONFLICT;
+                statusCode = utils_1.HTTP_STATUS.CONFLICT;
                 code = 'DUPLICATE_ENTRY';
                 message = 'A record with this information already exists';
                 details = { field: prismaError.meta?.target?.[0] };
                 break;
             case 'P2025':
-                statusCode = shared_1.HTTP_STATUS.NOT_FOUND;
+                statusCode = utils_1.HTTP_STATUS.NOT_FOUND;
                 code = 'RECORD_NOT_FOUND';
                 message = 'Record not found';
                 break;
             default:
-                statusCode = shared_1.HTTP_STATUS.BAD_REQUEST;
+                statusCode = utils_1.HTTP_STATUS.BAD_REQUEST;
                 code = 'DATABASE_ERROR';
                 message = 'Database operation failed';
         }
@@ -58,7 +58,7 @@ const errorHandler = (error, req, res, next) => {
     // Handle Zod validation errors
     else if (error.name === 'ZodError') {
         const zodError = error;
-        statusCode = shared_1.HTTP_STATUS.BAD_REQUEST;
+        statusCode = utils_1.HTTP_STATUS.BAD_REQUEST;
         code = 'VALIDATION_ERROR';
         message = 'Validation failed';
         details = zodError.errors.map((err) => ({
@@ -68,18 +68,18 @@ const errorHandler = (error, req, res, next) => {
     }
     // Handle JWT errors
     else if (error.name === 'JsonWebTokenError') {
-        statusCode = shared_1.HTTP_STATUS.UNAUTHORIZED;
+        statusCode = utils_1.HTTP_STATUS.UNAUTHORIZED;
         code = 'INVALID_TOKEN';
         message = 'Invalid token';
     }
     else if (error.name === 'TokenExpiredError') {
-        statusCode = shared_1.HTTP_STATUS.UNAUTHORIZED;
+        statusCode = utils_1.HTTP_STATUS.UNAUTHORIZED;
         code = 'TOKEN_EXPIRED';
         message = 'Token has expired';
     }
     // Handle other known errors
     else if (error.message.includes('ENOTFOUND') || error.message.includes('ECONNREFUSED')) {
-        statusCode = shared_1.HTTP_STATUS.INTERNAL_SERVER_ERROR;
+        statusCode = utils_1.HTTP_STATUS.INTERNAL_SERVER_ERROR;
         code = 'DATABASE_CONNECTION_ERROR';
         message = 'Database connection failed';
     }
@@ -94,7 +94,7 @@ const errorHandler = (error, req, res, next) => {
         });
     }
     // Send error response
-    const errorResponse = (0, shared_1.createErrorResponse)(message, code, details);
+    const errorResponse = (0, utils_1.createErrorResponse)(message, code, details);
     res.status(statusCode).json(errorResponse);
 };
 exports.errorHandler = errorHandler;

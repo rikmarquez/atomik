@@ -2,20 +2,20 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authController = void 0;
 const auth_1 = require("../services/auth");
-const shared_1 = require("@atomic/shared");
+const utils_1 = require("../types/utils");
 // Register new user
 const register = async (req, res, next) => {
     try {
         const { email, password, name } = req.body;
         if (!email || !password || !name) {
-            return res.status(shared_1.HTTP_STATUS.BAD_REQUEST).json({
+            return res.status(utils_1.HTTP_STATUS.BAD_REQUEST).json({
                 success: false,
                 error: 'Email, password, and name are required',
                 code: 'MISSING_FIELDS'
             });
         }
         const result = await (0, auth_1.registerUser)({ email, password, name });
-        res.status(shared_1.HTTP_STATUS.CREATED).json((0, shared_1.createSuccessResponse)({
+        res.status(utils_1.HTTP_STATUS.CREATED).json((0, utils_1.createSuccessResponse)({
             user: result.user,
             tokens: result.tokens
         }, 'User registered successfully'));
@@ -29,14 +29,14 @@ const login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
-            return res.status(shared_1.HTTP_STATUS.BAD_REQUEST).json({
+            return res.status(utils_1.HTTP_STATUS.BAD_REQUEST).json({
                 success: false,
                 error: 'Email and password are required',
                 code: 'MISSING_FIELDS'
             });
         }
         const result = await (0, auth_1.loginUser)({ email, password });
-        res.status(shared_1.HTTP_STATUS.OK).json((0, shared_1.createSuccessResponse)({
+        res.status(utils_1.HTTP_STATUS.OK).json((0, utils_1.createSuccessResponse)({
             user: result.user,
             tokens: result.tokens
         }, 'Login successful'));
@@ -50,14 +50,14 @@ const refreshToken = async (req, res, next) => {
     try {
         const { refreshToken } = req.body;
         if (!refreshToken) {
-            return res.status(shared_1.HTTP_STATUS.BAD_REQUEST).json({
+            return res.status(utils_1.HTTP_STATUS.BAD_REQUEST).json({
                 success: false,
                 error: 'Refresh token is required',
                 code: 'MISSING_REFRESH_TOKEN'
             });
         }
         const tokens = await (0, auth_1.refreshAccessToken)(refreshToken);
-        res.status(shared_1.HTTP_STATUS.OK).json((0, shared_1.createSuccessResponse)(tokens, 'Token refreshed successfully'));
+        res.status(utils_1.HTTP_STATUS.OK).json((0, utils_1.createSuccessResponse)(tokens, 'Token refreshed successfully'));
     }
     catch (error) {
         next(error);
@@ -68,14 +68,14 @@ const logout = async (req, res, next) => {
     try {
         const { refreshToken } = req.body;
         if (!refreshToken) {
-            return res.status(shared_1.HTTP_STATUS.BAD_REQUEST).json({
+            return res.status(utils_1.HTTP_STATUS.BAD_REQUEST).json({
                 success: false,
                 error: 'Refresh token is required',
                 code: 'MISSING_REFRESH_TOKEN'
             });
         }
         await (0, auth_1.logoutUser)(refreshToken);
-        res.status(shared_1.HTTP_STATUS.OK).json((0, shared_1.createSuccessResponse)(null, 'Logout successful'));
+        res.status(utils_1.HTTP_STATUS.OK).json((0, utils_1.createSuccessResponse)(null, 'Logout successful'));
     }
     catch (error) {
         next(error);
@@ -86,7 +86,7 @@ const getProfile = async (req, res, next) => {
     try {
         const userId = req.user?.id;
         if (!userId) {
-            return res.status(shared_1.HTTP_STATUS.UNAUTHORIZED).json({
+            return res.status(utils_1.HTTP_STATUS.UNAUTHORIZED).json({
                 success: false,
                 error: 'User not authenticated',
                 code: 'NOT_AUTHENTICATED'
@@ -94,13 +94,13 @@ const getProfile = async (req, res, next) => {
         }
         const user = await (0, auth_1.getUserById)(userId);
         if (!user) {
-            return res.status(shared_1.HTTP_STATUS.NOT_FOUND).json({
+            return res.status(utils_1.HTTP_STATUS.NOT_FOUND).json({
                 success: false,
                 error: 'User not found',
                 code: 'USER_NOT_FOUND'
             });
         }
-        res.status(shared_1.HTTP_STATUS.OK).json((0, shared_1.createSuccessResponse)(user, 'Profile retrieved successfully'));
+        res.status(utils_1.HTTP_STATUS.OK).json((0, utils_1.createSuccessResponse)(user, 'Profile retrieved successfully'));
     }
     catch (error) {
         next(error);
@@ -111,7 +111,7 @@ const updateProfile = async (req, res, next) => {
     try {
         const userId = req.user?.id;
         if (!userId) {
-            return res.status(shared_1.HTTP_STATUS.UNAUTHORIZED).json({
+            return res.status(utils_1.HTTP_STATUS.UNAUTHORIZED).json({
                 success: false,
                 error: 'User not authenticated',
                 code: 'NOT_AUTHENTICATED'
@@ -119,14 +119,14 @@ const updateProfile = async (req, res, next) => {
         }
         const { name, email } = req.body;
         if (!name && !email) {
-            return res.status(shared_1.HTTP_STATUS.BAD_REQUEST).json({
+            return res.status(utils_1.HTTP_STATUS.BAD_REQUEST).json({
                 success: false,
                 error: 'At least one field (name or email) is required',
                 code: 'MISSING_FIELDS'
             });
         }
         const updatedUser = await (0, auth_1.updateUserProfile)(userId, { name, email });
-        res.status(shared_1.HTTP_STATUS.OK).json((0, shared_1.createSuccessResponse)(updatedUser, 'Profile updated successfully'));
+        res.status(utils_1.HTTP_STATUS.OK).json((0, utils_1.createSuccessResponse)(updatedUser, 'Profile updated successfully'));
     }
     catch (error) {
         next(error);

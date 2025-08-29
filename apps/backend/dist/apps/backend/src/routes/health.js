@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const client_1 = require("@prisma/client");
-const shared_1 = require("@atomic/shared");
+const utils_1 = require("../types/utils");
 const router = (0, express_1.Router)();
 const prisma = new client_1.PrismaClient();
 // Health check endpoint
@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
             uptime: process.uptime(),
             memory: process.memoryUsage(),
         };
-        res.status(shared_1.HTTP_STATUS.OK).json((0, shared_1.createSuccessResponse)(healthInfo));
+        res.status(utils_1.HTTP_STATUS.OK).json((0, utils_1.createSuccessResponse)(healthInfo));
     }
     catch (error) {
         const errorInfo = {
@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
             uptime: process.uptime(),
             error: error instanceof Error ? error.message : 'Unknown error',
         };
-        res.status(shared_1.HTTP_STATUS.INTERNAL_SERVER_ERROR).json((0, shared_1.createSuccessResponse)(errorInfo));
+        res.status(utils_1.HTTP_STATUS.INTERNAL_SERVER_ERROR).json((0, utils_1.createSuccessResponse)(errorInfo));
     }
 });
 // Database health check
@@ -45,7 +45,7 @@ router.get('/db', async (req, res) => {
             responseTime: `${responseTime}ms`,
             timestamp: new Date().toISOString(),
         };
-        res.status(shared_1.HTTP_STATUS.OK).json((0, shared_1.createSuccessResponse)(dbHealth));
+        res.status(utils_1.HTTP_STATUS.OK).json((0, utils_1.createSuccessResponse)(dbHealth));
     }
     catch (error) {
         const dbHealth = {
@@ -53,7 +53,7 @@ router.get('/db', async (req, res) => {
             error: error instanceof Error ? error.message : 'Unknown database error',
             timestamp: new Date().toISOString(),
         };
-        res.status(shared_1.HTTP_STATUS.INTERNAL_SERVER_ERROR).json((0, shared_1.createSuccessResponse)(dbHealth));
+        res.status(utils_1.HTTP_STATUS.INTERNAL_SERVER_ERROR).json((0, utils_1.createSuccessResponse)(dbHealth));
     }
 });
 exports.default = router;

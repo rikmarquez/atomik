@@ -20,7 +20,8 @@
       "Bash(cmd //c taskkill:*)",
       "Bash(timeout:*)",
       "Bash(PORT=3005 npm run dev)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(railway login:*)"
     ],
     "deny": [],
     "ask": []
