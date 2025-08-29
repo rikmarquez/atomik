@@ -27,7 +27,7 @@ app.use((0, compression_1.default)());
 // Rate limiting
 const limiter = (0, express_rate_limit_1.default)({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: process.env.NODE_ENV === 'production' ? 100 : 1000, // limit each IP
+    max: process.env.NODE_ENV === 'production' ? 1000 : 1000, // limit each IP
     message: 'Too many requests from this IP, please try again later.',
     standardHeaders: true,
     legacyHeaders: false,
@@ -36,18 +36,21 @@ app.use(limiter);
 // CORS configuration - simplified and more permissive
 const corsOrigins = process.env.CORS_ORIGINS?.split(',') || ['http://localhost:3000'];
 console.log('🌐 CORS Origins:', corsOrigins); // Debug CORS
-// Enable CORS for all routes
+// Enable CORS for all routes - BEFORE everything else
 app.use((req, res, next) => {
     const origin = req.headers.origin;
-    if (origin && corsOrigins.includes(origin)) {
-        res.header('Access-Control-Allow-Origin', origin);
-    }
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-    // Handle preflight requests
+    console.log('🌐 Request:', req.method, req.url, 'from:', origin);
+    // Set CORS headers for ALL origins (temporary fix for testing)
+    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+    res.setHeader('Access-Control-Max-Age', '86400');
+    console.log('✅ CORS headers set for ALL origins (temporary):', origin);
+    // Handle preflight requests immediately
     if (req.method === 'OPTIONS') {
-        console.log('🔍 CORS Preflight for:', req.url, 'from:', origin);
+        console.log('🔍 CORS Preflight for:', req.url, 'from:', origin, '-> Allowed');
+        res.header('Content-Length', '0');
         return res.status(200).end();
     }
     next();
