@@ -16,7 +16,7 @@ i18n
       es: { translation: es }
     },
     fallbackLng: 'en',
-    debug: process.env.NODE_ENV === 'development',
+    debug: import.meta.env.DEV,
 
     // Language detection options
     detection: {
@@ -40,7 +40,7 @@ i18n
     defaultNS: 'translation',
 
     // Load missing translations in development
-    saveMissing: process.env.NODE_ENV === 'development',
+    saveMissing: import.meta.env.DEV,
   })
 
 export default i18n
