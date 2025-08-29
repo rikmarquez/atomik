@@ -18,6 +18,11 @@ declare global {
 // Auth middleware to protect routes
 export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   try {
+    // Skip authentication for OPTIONS requests (CORS preflight)
+    if (req.method === 'OPTIONS') {
+      return next();
+    }
+    
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
