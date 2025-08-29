@@ -75,7 +75,7 @@ const IdentityAreas = () => {
   }
 
   const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete "${name}"?`)) return
+    if (!confirm(t('identity_areas.delete_confirm'))) return
 
     setLoading(true)
     setError(null)
@@ -136,7 +136,7 @@ const IdentityAreas = () => {
           <form onSubmit={handleCreateOrUpdate} className="space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                Name <span className="text-red-500">*</span>
+                {t('identity_areas.name')} <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -145,13 +145,13 @@ const IdentityAreas = () => {
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder='e.g., "Health & Fitness", "Personal Growth"'
+                placeholder={t('identity_areas.name_placeholder')}
               />
             </div>
 
             <div>
               <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-                Description
+                {t('identity_areas.description_label')}
               </label>
               <textarea
                 id="description"
@@ -159,13 +159,13 @@ const IdentityAreas = () => {
                 onChange={(e) => setFormData({...formData, description: e.target.value})}
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder='e.g., "I am someone who prioritizes my physical and mental health"'
+                placeholder={t('identity_areas.description_placeholder')}
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Color Theme
+                {t('identity_areas.color')}
               </label>
               <div className="flex space-x-2 mb-2">
                 {presetColors.map(color => (
@@ -194,14 +194,14 @@ const IdentityAreas = () => {
                 disabled={loading || !formData.name.trim()}
                 className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Saving...' : editingArea ? 'Update' : 'Create'}
+                {loading ? t('common.loading') : editingArea ? t('common.update') : t('common.create')}
               </button>
               <button
                 type="button"
                 onClick={handleCancel}
                 className="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400 transition-colors"
               >
-                Cancel
+                {t('common.cancel')}
               </button>
             </div>
           </form>
@@ -219,13 +219,13 @@ const IdentityAreas = () => {
           <div className="text-6xl mb-4">🎯</div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">{t('identity_areas.no_areas')}</h3>
           <p className="text-gray-600 mb-6">
-            Create your first identity area to start building atomic systems
+            {t('identity_areas.no_areas_message')}
           </p>
           <button
             onClick={() => setShowCreateForm(true)}
             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
           >
-            🎯 Create Your First Identity Area
+            🎯 {t('identity_areas.create_new')}
           </button>
         </div>
       ) : (
@@ -250,7 +250,7 @@ const IdentityAreas = () => {
                     <button
                       onClick={() => handleDelete(area.id, area.name)}
                       className="text-gray-400 hover:text-red-600 p-1"
-                      title="Delete"
+                      title={t('common.delete')}
                     >
                       🗑️
                     </button>
@@ -263,7 +263,7 @@ const IdentityAreas = () => {
                 
                 <div className="flex items-center justify-between text-sm text-gray-500">
                   <span>Systems: 0</span>
-                  <span>Created {new Date(area.createdAt).toLocaleDateString()}</span>
+                  <span>{t('common.create')}d {new Date(area.createdAt).toLocaleDateString()}</span>
                 </div>
 
                 <div className="mt-4 pt-4 border-t border-gray-100">
@@ -271,7 +271,7 @@ const IdentityAreas = () => {
                     to="/atomic-systems" 
                     className="inline-block bg-green-500 text-white text-sm px-4 py-2 rounded hover:bg-green-600 transition-colors"
                   >
-                    ⚡ Create System
+                    ⚡ {t('atomic_systems.create_system')}
                   </Link>
                 </div>
               </div>

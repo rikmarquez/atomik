@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { atomicSystemsApi, identityAreasApi, handleApiError } from '../services/api'
 import { AtomicSystem, CreateAtomicSystemData, UpdateAtomicSystemData, IdentityArea } from '../types/shared'
 
 const AtomicSystems = () => {
+  const { t } = useTranslation()
   const [atomicSystems, setAtomicSystems] = useState<AtomicSystem[]>([])
   const [identityAreas, setIdentityAreas] = useState<IdentityArea[]>([])
   const [loading, setLoading] = useState(false)
@@ -176,9 +178,9 @@ const AtomicSystems = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Atomic Systems</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{t('atomic_systems.title')}</h1>
           <p className="text-gray-600 mt-1">
-            Build consistent systems using the 4 Laws of Behavior Change
+            {t('atomic_systems.subtitle')}
           </p>
         </div>
         <button
@@ -186,20 +188,20 @@ const AtomicSystems = () => {
           disabled={loading}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
         >
-          ⚡ New System
+          ⚡ {t('atomic_systems.create_new')}
         </button>
       </div>
 
       {/* Filter */}
       <div className="bg-white p-4 rounded-lg shadow">
         <div className="flex items-center space-x-4">
-          <label className="text-sm font-medium text-gray-700">Filter by Identity Area:</label>
+          <label className="text-sm font-medium text-gray-700">{t('atomic_systems.select_identity_area')}:</label>
           <select
             value={selectedAreaFilter}
             onChange={(e) => setSelectedAreaFilter(e.target.value)}
             className="border border-gray-300 rounded px-3 py-1 text-sm"
           >
-            <option value="">All Areas</option>
+            <option value="">{t('nav.identity_areas')}</option>
             {identityAreas.map(area => (
               <option key={area.id} value={area.id}>{area.name}</option>
             ))}
@@ -217,7 +219,7 @@ const AtomicSystems = () => {
       {showCreateForm && (
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-lg font-semibold mb-4">
-            {editingSystem ? 'Edit Atomic System' : 'Create New Atomic System'}
+            {editingSystem ? t('atomic_systems.edit_system') : t('atomic_systems.create_new')}
           </h3>
           
           <form onSubmit={handleCreateOrUpdate} className="space-y-4">
@@ -233,7 +235,7 @@ const AtomicSystems = () => {
                   disabled={!!editingSystem}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
                 >
-                  <option value="">Select an Identity Area</option>
+                  <option value="">{t('atomic_systems.select_identity_area')}</option>
                   {identityAreas.map(area => (
                     <option key={area.id} value={area.id}>{area.name}</option>
                   ))}
@@ -242,7 +244,7 @@ const AtomicSystems = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  System Name <span className="text-red-500">*</span>
+                  {t('atomic_systems.system_name')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -250,21 +252,21 @@ const AtomicSystems = () => {
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="e.g., Morning Workout System"
+                  placeholder={t('atomic_systems.system_name_placeholder')}
                 />
               </div>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Description
+                {t('atomic_systems.system_description')}
               </label>
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({...formData, description: e.target.value})}
                 rows={2}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Brief description of this system..."
+                placeholder={t('atomic_systems.system_description_placeholder')}
               />
             </div>
 
@@ -272,7 +274,7 @@ const AtomicSystems = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  🎯 Cue (1st Law: Make it Obvious) <span className="text-red-500">*</span>
+                  🎯 {t('atomic_systems.law_1')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -280,13 +282,13 @@ const AtomicSystems = () => {
                   onChange={(e) => setFormData({...formData, cue: e.target.value})}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="After I wake up..."
+                  placeholder={t('atomic_systems.law_1_placeholder')}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  💫 Craving (2nd Law: Make it Attractive) <span className="text-red-500">*</span>
+                  💫 {t('atomic_systems.law_2')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -294,13 +296,13 @@ const AtomicSystems = () => {
                   onChange={(e) => setFormData({...formData, craving: e.target.value})}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="I will feel energized and strong..."
+                  placeholder={t('atomic_systems.law_2_placeholder')}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  ⚡ Response (3rd Law: Make it Easy) <span className="text-red-500">*</span>
+                  ⚡ {t('atomic_systems.law_3')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -308,13 +310,13 @@ const AtomicSystems = () => {
                   onChange={(e) => setFormData({...formData, response: e.target.value})}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="I will do 10 push-ups..."
+                  placeholder={t('atomic_systems.law_3_placeholder')}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  🎉 Reward (4th Law: Make it Satisfying) <span className="text-red-500">*</span>
+                  🎉 {t('atomic_systems.law_4')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -322,7 +324,7 @@ const AtomicSystems = () => {
                   onChange={(e) => setFormData({...formData, reward: e.target.value})}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="I will celebrate by checking it off..."
+                  placeholder={t('atomic_systems.law_4_placeholder')}
                 />
               </div>
             </div>
@@ -330,16 +332,16 @@ const AtomicSystems = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Frequency
+                  {t('atomic_systems.frequency')}
                 </label>
                 <select
                   value={formData.frequency}
                   onChange={(e) => setFormData({...formData, frequency: e.target.value as any})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
-                  <option value="DAILY">Daily</option>
-                  <option value="WEEKLY">Weekly</option>
-                  <option value="CUSTOM">Custom</option>
+                  <option value="DAILY">{t('atomic_systems.frequency_daily')}</option>
+                  <option value="WEEKLY">{t('atomic_systems.frequency_weekly')}</option>
+                  <option value="CUSTOM">{t('atomic_systems.frequency_custom')}</option>
                 </select>
               </div>
 
@@ -360,18 +362,18 @@ const AtomicSystems = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Difficulty (1-5)
+                  {t('atomic_systems.difficulty')}
                 </label>
                 <select
                   value={formData.difficulty}
                   onChange={(e) => setFormData({...formData, difficulty: Number(e.target.value)})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
-                  <option value={1}>1 - Very Easy</option>
-                  <option value={2}>2 - Easy</option>
+                  <option value={1}>1 - {t('atomic_systems.difficulty_easy')}</option>
+                  <option value={2}>2 - {t('atomic_systems.difficulty_easy')}</option>
                   <option value={3}>3 - Moderate</option>
-                  <option value={4}>4 - Hard</option>
-                  <option value={5}>5 - Very Hard</option>
+                  <option value={4}>4 - {t('atomic_systems.difficulty_hard')}</option>
+                  <option value={5}>5 - {t('atomic_systems.difficulty_hard')}</option>
                 </select>
               </div>
             </div>
@@ -382,14 +384,14 @@ const AtomicSystems = () => {
                 disabled={loading || !formData.name.trim() || !formData.identityAreaId}
                 className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Saving...' : editingSystem ? 'Update System' : 'Create System'}
+                {loading ? t('common.loading') : editingSystem ? t('atomic_systems.update_system') : t('atomic_systems.create_system')}
               </button>
               <button
                 type="button"
                 onClick={resetForm}
                 className="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400 transition-colors"
               >
-                Cancel
+                {t('common.cancel')}
               </button>
             </div>
           </form>
@@ -405,15 +407,15 @@ const AtomicSystems = () => {
       ) : atomicSystems.length === 0 ? (
         <div className="text-center py-12 bg-white rounded-lg shadow">
           <div className="text-6xl mb-4">⚡</div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No Atomic Systems Yet</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">{t('atomic_systems.no_systems')}</h3>
           <p className="text-gray-600 mb-6">
-            Create your first atomic system to start building consistent habits
+            {t('atomic_systems.no_systems_message')}
           </p>
           <button
             onClick={() => setShowCreateForm(true)}
             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
           >
-            ⚡ Create Your First System
+            ⚡ {t('atomic_systems.create_new')}
           </button>
         </div>
       ) : (
@@ -436,7 +438,7 @@ const AtomicSystems = () => {
                       <button
                         onClick={() => handleExecute(system.id, system.name)}
                         className="text-green-600 hover:text-green-700 p-2 rounded"
-                        title="Execute System"
+                        title={t('atomic_systems.execute_system')}
                       >
                         ✅
                       </button>
