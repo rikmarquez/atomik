@@ -45,17 +45,13 @@ app.use((req, res, next) => {
   const origin = req.headers.origin;
   console.log('🌐 Request:', req.method, req.url, 'from:', origin);
   
-  // Always set CORS headers for allowed origins
-  if (origin && corsOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
-    res.setHeader('Access-Control-Max-Age', '86400'); // Cache preflight for 24 hours
-    console.log('✅ CORS headers set for:', origin);
-  } else {
-    console.log('❌ Origin not allowed:', origin, 'Allowed:', corsOrigins);
-  }
+  // Set CORS headers for ALL origins (temporary fix for testing)
+  res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+  res.setHeader('Access-Control-Max-Age', '86400');
+  console.log('✅ CORS headers set for ALL origins (temporary):', origin);
   
   // Handle preflight requests immediately
   if (req.method === 'OPTIONS') {
