@@ -7,7 +7,7 @@ import {
   getUserById,
   updateUserProfile
 } from '../services/auth';
-import { createSuccessResponse, HTTP_STATUS } from '@atomic/shared';
+import { createSuccessResponse, HTTP_STATUS } from '../types/utils';
 
 // Register new user
 const register = async (req: Request, res: Response, next: NextFunction) => {

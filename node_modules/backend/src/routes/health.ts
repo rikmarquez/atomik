@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { createSuccessResponse, HTTP_STATUS } from '@atomic/shared';
+import { createSuccessResponse, HTTP_STATUS } from '../types/utils';
 
 const router = Router();
 const prisma = new PrismaClient();

@@ -5,13 +5,15 @@ import {
   User, 
   AuthTokens, 
   LoginCredentials, 
-  RegisterCredentials,
+  RegisterCredentials
+} from '../types/shared';
+import { 
   validatePassword,
   isValidEmail,
-  validateName
-} from '@atomic/shared';
+  validateName,
+  HTTP_STATUS
+} from '../types/utils';
 import { AppError } from '../middleware/error';
-import { HTTP_STATUS } from '@atomic/shared';
 
 const prisma = new PrismaClient();
 

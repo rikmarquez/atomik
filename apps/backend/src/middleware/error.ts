@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { HTTP_STATUS, createErrorResponse } from '@atomic/shared';
+import { HTTP_STATUS, createErrorResponse } from '../types/utils';
 
 // Custom error class
 export class AppError extends Error {

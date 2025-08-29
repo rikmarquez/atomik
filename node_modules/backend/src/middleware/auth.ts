@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyToken } from '../services/auth';
 import { AppError } from './error';
-import { HTTP_STATUS } from '@atomic/shared';
+import { HTTP_STATUS } from '../types/utils';
 
 // Extend Express Request type to include user
 declare global {
