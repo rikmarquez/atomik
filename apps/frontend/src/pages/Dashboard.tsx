@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../store/AuthContext'
 import { authApi, handleApiError } from '../services/api'
 import { User } from '../types/shared'
 
 const Dashboard = () => {
   const { user, setUser } = useAuth()
+  const { t } = useTranslation()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [userProfile, setUserProfile] = useState<User | null>(user)
@@ -38,7 +40,7 @@ const Dashboard = () => {
   if (!user) {
     return (
       <div className="text-center">
-        <p className="text-gray-600">Loading user information...</p>
+        <p className="text-gray-600">{t('common.loading')}</p>
       </div>
     )
   }
@@ -50,10 +52,10 @@ const Dashboard = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              Welcome back, {userProfile?.name || user.name}! 👋
+              {t('dashboard.welcome', { name: userProfile?.name || user.name })}
             </h1>
             <p className="text-gray-600 mt-1">
-              Ready to work on your atomic systems today?
+              {t('dashboard.ready_message')}
             </p>
           </div>
           <div className="text-right">

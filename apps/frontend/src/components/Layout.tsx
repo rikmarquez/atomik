@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../store/AuthContext'
 import { authApi } from '../services/api'
+import LanguageSelector from './LanguageSelector'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -37,6 +38,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <Link to="/" className="text-gray-600 hover:text-gray-900">
                 Home
               </Link>
+              
+              <LanguageSelector />
               
               {user ? (
                 // Authenticated navigation
