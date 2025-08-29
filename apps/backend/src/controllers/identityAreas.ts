@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
 import { z } from 'zod'
-import { ApiResponse, AuthenticatedRequest } from '../types'
+import { ApiResponse } from '../types'
 
 const prisma = new PrismaClient()
 
@@ -18,7 +18,7 @@ const updateIdentityAreaSchema = createIdentityAreaSchema.partial()
 /**
  * Get all identity areas for the authenticated user
  */
-export const getIdentityAreas = async (req: AuthenticatedRequest, res: Response) => {
+export const getIdentityAreas = async (req: any, res: Response) => {
   try {
     const userId = req.user!.id
 
@@ -70,7 +70,7 @@ export const getIdentityAreas = async (req: AuthenticatedRequest, res: Response)
 /**
  * Get a single identity area by ID
  */
-export const getIdentityArea = async (req: AuthenticatedRequest, res: Response) => {
+export const getIdentityArea = async (req: any, res: Response) => {
   try {
     const userId = req.user!.id
     const { id } = req.params
@@ -127,7 +127,7 @@ export const getIdentityArea = async (req: AuthenticatedRequest, res: Response) 
 /**
  * Create a new identity area
  */
-export const createIdentityArea = async (req: AuthenticatedRequest, res: Response) => {
+export const createIdentityArea = async (req: any, res: Response) => {
   try {
     const userId = req.user!.id
 
@@ -211,7 +211,7 @@ export const createIdentityArea = async (req: AuthenticatedRequest, res: Respons
 /**
  * Update an identity area
  */
-export const updateIdentityArea = async (req: AuthenticatedRequest, res: Response) => {
+export const updateIdentityArea = async (req: any, res: Response) => {
   try {
     const userId = req.user!.id
     const { id } = req.params
@@ -308,7 +308,7 @@ export const updateIdentityArea = async (req: AuthenticatedRequest, res: Respons
 /**
  * Delete an identity area (soft delete)
  */
-export const deleteIdentityArea = async (req: AuthenticatedRequest, res: Response) => {
+export const deleteIdentityArea = async (req: any, res: Response) => {
   try {
     const userId = req.user!.id
     const { id } = req.params
@@ -374,7 +374,7 @@ export const deleteIdentityArea = async (req: AuthenticatedRequest, res: Respons
 /**
  * Reorder identity areas
  */
-export const reorderIdentityAreas = async (req: AuthenticatedRequest, res: Response) => {
+export const reorderIdentityAreas = async (req: any, res: Response) => {
   try {
     const userId = req.user!.id
 

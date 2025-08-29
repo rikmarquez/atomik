@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
 import { z } from 'zod'
-import { ApiResponse, AuthenticatedRequest } from '../types'
+import { ApiResponse } from '../types'
 
 const prisma = new PrismaClient()
 
@@ -26,7 +26,7 @@ const updateAtomicSystemSchema = createAtomicSystemSchema.partial().omit({ ident
 /**
  * Get all atomic systems for the authenticated user
  */
-export const getAtomicSystems = async (req: AuthenticatedRequest, res: Response) => {
+export const getAtomicSystems = async (req: any, res: Response) => {
   try {
     const userId = req.user!.id
     const { identityAreaId } = req.query
@@ -84,7 +84,7 @@ export const getAtomicSystems = async (req: AuthenticatedRequest, res: Response)
 /**
  * Get a single atomic system by ID
  */
-export const getAtomicSystem = async (req: AuthenticatedRequest, res: Response) => {
+export const getAtomicSystem = async (req: any, res: Response) => {
   try {
     const userId = req.user!.id
     const { id } = req.params
@@ -148,7 +148,7 @@ export const getAtomicSystem = async (req: AuthenticatedRequest, res: Response) 
 /**
  * Create a new atomic system
  */
-export const createAtomicSystem = async (req: AuthenticatedRequest, res: Response) => {
+export const createAtomicSystem = async (req: any, res: Response) => {
   try {
     const userId = req.user!.id
 
@@ -263,7 +263,7 @@ export const createAtomicSystem = async (req: AuthenticatedRequest, res: Respons
 /**
  * Update an atomic system
  */
-export const updateAtomicSystem = async (req: AuthenticatedRequest, res: Response) => {
+export const updateAtomicSystem = async (req: any, res: Response) => {
   try {
     const userId = req.user!.id
     const { id } = req.params
@@ -358,7 +358,7 @@ export const updateAtomicSystem = async (req: AuthenticatedRequest, res: Respons
 /**
  * Delete an atomic system (soft delete)
  */
-export const deleteAtomicSystem = async (req: AuthenticatedRequest, res: Response) => {
+export const deleteAtomicSystem = async (req: any, res: Response) => {
   try {
     const userId = req.user!.id
     const { id } = req.params
@@ -406,7 +406,7 @@ export const deleteAtomicSystem = async (req: AuthenticatedRequest, res: Respons
 /**
  * Execute/complete an atomic system
  */
-export const executeAtomicSystem = async (req: AuthenticatedRequest, res: Response) => {
+export const executeAtomicSystem = async (req: any, res: Response) => {
   try {
     const userId = req.user!.id
     const { id } = req.params
