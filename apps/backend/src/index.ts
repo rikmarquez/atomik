@@ -44,6 +44,16 @@ app.use(cors({
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
+  preflightContinue: false, // Pass control to the next handler
+}));
+
+// Handle preflight requests explicitly
+app.options('*', cors({
+  origin: corsOrigins,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 }));
 
 // Body parsing middleware
