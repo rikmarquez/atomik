@@ -7,9 +7,8 @@ exports.updateUserProfile = exports.getUserById = exports.logoutUser = exports.r
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const client_1 = require("@prisma/client");
-const shared_1 = require("@atomic/shared");
+const utils_1 = require("../types/utils");
 const error_1 = require("../middleware/error");
-const shared_2 = require("@atomic/shared");
 const prisma = new client_1.PrismaClient();
 // JWT configuration
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -18,8 +17,8 @@ const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '30d';
 const BCRYPT_SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS || '12');
 // Generate JWT tokens
 const generateTokens = (userId) => {
-    const accessToken = jsonwebtoken_1.default.sign({ userId, type: 'access' }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
-    const refreshToken = jsonwebtoken_1.default.sign({ userId, type: 'refresh' }, JWT_SECRET, { expiresIn: JWT_REFRESH_EXPIRES_IN });
+    const accessToken = jsonwebtoken_1.default.sign({ userId, type: 'access' }, JWT_SECRET);
+    const refreshToken = jsonwebtoken_1.default.sign({ userId, type: 'refresh' }, JWT_SECRET);
     return { accessToken, refreshToken };
 };
 exports.generateTokens = generateTokens;
@@ -31,9 +30,9 @@ const verifyToken = (token) => {
     }
     catch (error) {
         if (error instanceof jsonwebtoken_1.default.TokenExpiredError) {
-            throw new error_1.AppError('Token has expired', shared_2.HTTP_STATUS.UNAUTHORIZED, 'TOKEN_EXPIRED');
+            throw new error_1.AppError('Token has expired', utils_1.HTTP_STATUS.UNAUTHORIZED, 'TOKEN_EXPIRED');
         }
-        throw new error_1.AppError('Invalid token', shared_2.HTTP_STATUS.UNAUTHORIZED, 'INVALID_TOKEN');
+        throw new error_1.AppError('Invalid token', utils_1.HTTP_STATUS.UNAUTHORIZED, 'INVALID_TOKEN');
     }
 };
 exports.verifyToken = verifyToken;
@@ -51,23 +50,23 @@ exports.comparePassword = comparePassword;
 const registerUser = async (credentials) => {
     const { email, password, name } = credentials;
     // Validate input
-    if (!(0, shared_1.isValidEmail)(email)) {
-        throw new error_1.AppError('Invalid email format', shared_2.HTTP_STATUS.BAD_REQUEST, 'INVALID_EMAIL');
+    if (!(0, utils_1.isValidEmail)(email)) {
+        throw new error_1.AppError('Invalid email format', utils_1.HTTP_STATUS.BAD_REQUEST, 'INVALID_EMAIL');
     }
-    const passwordValidation = (0, shared_1.validatePassword)(password);
+    const passwordValidation = (0, utils_1.validatePassword)(password);
     if (!passwordValidation.isValid) {
-        throw new error_1.AppError(passwordValidation.errors[0], shared_2.HTTP_STATUS.BAD_REQUEST, 'WEAK_PASSWORD');
+        throw new error_1.AppError(passwordValidation.errors[0], utils_1.HTTP_STATUS.BAD_REQUEST, 'WEAK_PASSWORD');
     }
-    const nameValidation = (0, shared_1.validateName)(name);
+    const nameValidation = (0, utils_1.validateName)(name);
     if (!nameValidation.isValid) {
-        throw new error_1.AppError(nameValidation.error, shared_2.HTTP_STATUS.BAD_REQUEST, 'INVALID_NAME');
+        throw new error_1.AppError(nameValidation.error, utils_1.HTTP_STATUS.BAD_REQUEST, 'INVALID_NAME');
     }
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
         where: { email: email.toLowerCase() }
     });
     if (existingUser) {
-        throw new error_1.AppError('User already exists with this email', shared_2.HTTP_STATUS.CONFLICT, 'USER_EXISTS');
+        throw new error_1.AppError('User already exists with this email', utils_1.HTTP_STATUS.CONFLICT, 'USER_EXISTS');
     }
     // Hash password
     const hashedPassword = await (0, exports.hashPassword)(password);
@@ -105,26 +104,26 @@ exports.registerUser = registerUser;
 const loginUser = async (credentials) => {
     const { email, password } = credentials;
     // Validate input
-    if (!(0, shared_1.isValidEmail)(email)) {
-        throw new error_1.AppError('Invalid email format', shared_2.HTTP_STATUS.BAD_REQUEST, 'INVALID_EMAIL');
+    if (!(0, utils_1.isValidEmail)(email)) {
+        throw new error_1.AppError('Invalid email format', utils_1.HTTP_STATUS.BAD_REQUEST, 'INVALID_EMAIL');
     }
     if (!password) {
-        throw new error_1.AppError('Password is required', shared_2.HTTP_STATUS.BAD_REQUEST, 'PASSWORD_REQUIRED');
+        throw new error_1.AppError('Password is required', utils_1.HTTP_STATUS.BAD_REQUEST, 'PASSWORD_REQUIRED');
     }
     // Find user
     const user = await prisma.user.findUnique({
         where: { email: email.toLowerCase() }
     });
     if (!user) {
-        throw new error_1.AppError('Invalid email or password', shared_2.HTTP_STATUS.UNAUTHORIZED, 'INVALID_CREDENTIALS');
+        throw new error_1.AppError('Invalid email or password', utils_1.HTTP_STATUS.UNAUTHORIZED, 'INVALID_CREDENTIALS');
     }
     if (!user.isActive) {
-        throw new error_1.AppError('Account is deactivated', shared_2.HTTP_STATUS.UNAUTHORIZED, 'ACCOUNT_DEACTIVATED');
+        throw new error_1.AppError('Account is deactivated', utils_1.HTTP_STATUS.UNAUTHORIZED, 'ACCOUNT_DEACTIVATED');
     }
     // Verify password
     const isPasswordValid = await (0, exports.comparePassword)(password, user.password);
     if (!isPasswordValid) {
-        throw new error_1.AppError('Invalid email or password', shared_2.HTTP_STATUS.UNAUTHORIZED, 'INVALID_CREDENTIALS');
+        throw new error_1.AppError('Invalid email or password', utils_1.HTTP_STATUS.UNAUTHORIZED, 'INVALID_CREDENTIALS');
     }
     // Generate tokens
     const tokens = (0, exports.generateTokens)(user.id);
@@ -148,26 +147,26 @@ const refreshAccessToken = async (refreshToken) => {
     // Verify refresh token
     const { userId, type } = (0, exports.verifyToken)(refreshToken);
     if (type !== 'refresh') {
-        throw new error_1.AppError('Invalid token type', shared_2.HTTP_STATUS.UNAUTHORIZED, 'INVALID_TOKEN');
+        throw new error_1.AppError('Invalid token type', utils_1.HTTP_STATUS.UNAUTHORIZED, 'INVALID_TOKEN');
     }
     // Check if refresh token exists in database
     const storedToken = await prisma.refreshToken.findUnique({
         where: { token: refreshToken }
     });
     if (!storedToken) {
-        throw new error_1.AppError('Invalid refresh token', shared_2.HTTP_STATUS.UNAUTHORIZED, 'INVALID_REFRESH_TOKEN');
+        throw new error_1.AppError('Invalid refresh token', utils_1.HTTP_STATUS.UNAUTHORIZED, 'INVALID_REFRESH_TOKEN');
     }
     if (storedToken.expiresAt < new Date()) {
         // Clean up expired token
         await prisma.refreshToken.delete({ where: { id: storedToken.id } });
-        throw new error_1.AppError('Refresh token has expired', shared_2.HTTP_STATUS.UNAUTHORIZED, 'TOKEN_EXPIRED');
+        throw new error_1.AppError('Refresh token has expired', utils_1.HTTP_STATUS.UNAUTHORIZED, 'TOKEN_EXPIRED');
     }
     // Verify user still exists and is active
     const user = await prisma.user.findUnique({
         where: { id: userId }
     });
     if (!user || !user.isActive) {
-        throw new error_1.AppError('User not found or inactive', shared_2.HTTP_STATUS.UNAUTHORIZED, 'USER_INACTIVE');
+        throw new error_1.AppError('User not found or inactive', utils_1.HTTP_STATUS.UNAUTHORIZED, 'USER_INACTIVE');
     }
     // Generate new tokens
     const newTokens = (0, exports.generateTokens)(userId);
@@ -216,15 +215,15 @@ const updateUserProfile = async (userId, updates) => {
     const { name, email } = updates;
     // Validate name if provided
     if (name) {
-        const nameValidation = (0, shared_1.validateName)(name);
+        const nameValidation = (0, utils_1.validateName)(name);
         if (!nameValidation.isValid) {
-            throw new error_1.AppError(nameValidation.error, shared_2.HTTP_STATUS.BAD_REQUEST, 'INVALID_NAME');
+            throw new error_1.AppError(nameValidation.error, utils_1.HTTP_STATUS.BAD_REQUEST, 'INVALID_NAME');
         }
     }
     // Validate email if provided
     if (email) {
-        if (!(0, shared_1.isValidEmail)(email)) {
-            throw new error_1.AppError('Invalid email format', shared_2.HTTP_STATUS.BAD_REQUEST, 'INVALID_EMAIL');
+        if (!(0, utils_1.isValidEmail)(email)) {
+            throw new error_1.AppError('Invalid email format', utils_1.HTTP_STATUS.BAD_REQUEST, 'INVALID_EMAIL');
         }
         // Check if email is already taken by another user
         const existingUser = await prisma.user.findFirst({
@@ -234,7 +233,7 @@ const updateUserProfile = async (userId, updates) => {
             }
         });
         if (existingUser) {
-            throw new error_1.AppError('Email is already taken', shared_2.HTTP_STATUS.CONFLICT, 'EMAIL_TAKEN');
+            throw new error_1.AppError('Email is already taken', utils_1.HTTP_STATUS.CONFLICT, 'EMAIL_TAKEN');
         }
     }
     // Update user

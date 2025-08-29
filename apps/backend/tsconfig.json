@@ -15,11 +15,10 @@
     "types": ["node", "jest"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@atomic/shared": ["../../packages/shared/src"]
+      "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*", "../../packages/shared/src/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"],
   "ts-node": {
     "esm": true,
