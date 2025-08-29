@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { identityAreasApi, handleApiError } from '../services/api'
 import { IdentityArea, CreateIdentityAreaData, UpdateIdentityAreaData } from '../types/shared'
 
 const IdentityAreas = () => {
+  const { t } = useTranslation()
   const [identityAreas, setIdentityAreas] = useState<IdentityArea[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -104,9 +106,9 @@ const IdentityAreas = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Identity Areas</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{t('identity_areas.title')}</h1>
           <p className="text-gray-600 mt-1">
-            Define the areas of life where you want to build atomic systems
+            {t('identity_areas.subtitle')}
           </p>
         </div>
         <button
@@ -128,7 +130,7 @@ const IdentityAreas = () => {
       {showCreateForm && (
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-lg font-semibold mb-4">
-            {editingArea ? 'Edit Identity Area' : 'Create New Identity Area'}
+            {editingArea ? t('identity_areas.edit_area') : t('identity_areas.create_new')}
           </h3>
           
           <form onSubmit={handleCreateOrUpdate} className="space-y-4">
@@ -215,7 +217,7 @@ const IdentityAreas = () => {
       ) : identityAreas.length === 0 ? (
         <div className="text-center py-12 bg-white rounded-lg shadow">
           <div className="text-6xl mb-4">🎯</div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No Identity Areas Yet</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">{t('identity_areas.no_areas')}</h3>
           <p className="text-gray-600 mb-6">
             Create your first identity area to start building atomic systems
           </p>

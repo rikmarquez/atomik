@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../store/AuthContext'
 import { authApi } from '../services/api'
 import LanguageSelector from './LanguageSelector'
@@ -10,6 +11,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { user, logout } = useAuth()
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   const handleLogout = async () => {
@@ -36,7 +38,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </div>
             <nav className="flex items-center space-x-4">
               <Link to="/" className="text-gray-600 hover:text-gray-900">
-                Home
+                {t('common.home')}
               </Link>
               
               <LanguageSelector />
@@ -45,23 +47,23 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 // Authenticated navigation
                 <>
                   <Link to="/dashboard" className="text-gray-600 hover:text-gray-900">
-                    Dashboard
+                    {t('nav.dashboard')}
                   </Link>
                   <Link to="/identity-areas" className="text-gray-600 hover:text-gray-900">
-                    Identity Areas
+                    {t('nav.identity_areas')}
                   </Link>
                   <Link to="/atomic-systems" className="text-gray-600 hover:text-gray-900">
-                    Atomic Systems
+                    {t('nav.atomic_systems')}
                   </Link>
                   <div className="flex items-center space-x-3">
                     <span className="text-sm text-gray-700">
-                      Welcome, {user.name}
+                      {t('common.welcome')}, {user.name}
                     </span>
                     <button
                       onClick={handleLogout}
                       className="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300 transition-colors text-sm"
                     >
-                      Logout
+                      {t('nav.logout')}
                     </button>
                   </div>
                 </>
@@ -69,13 +71,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 // Unauthenticated navigation
                 <>
                   <Link to="/test" className="text-gray-600 hover:text-gray-900">
-                    Test
+                    {t('common.test')}
                   </Link>
                   <Link to="/login" className="text-gray-600 hover:text-gray-900">
-                    Login
+                    {t('nav.login')}
                   </Link>
                   <Link to="/register" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors">
-                    Register
+                    {t('nav.register')}
                   </Link>
                 </>
               )}
