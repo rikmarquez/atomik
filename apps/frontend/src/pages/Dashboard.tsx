@@ -21,7 +21,10 @@ const Dashboard = () => {
       try {
         const profile = await authApi.getProfile()
         setUserProfile(profile)
-        setUser(profile)
+        // Only update user context if the profile is actually different
+        if (JSON.stringify(user) !== JSON.stringify(profile)) {
+          setUser(profile)
+        }
       } catch (err) {
         setError(handleApiError(err))
       } finally {
@@ -30,7 +33,7 @@ const Dashboard = () => {
     }
 
     loadUserProfile()
-  }, [user, setUser])
+  }, []) // Remove user and setUser from dependencies to prevent loop
 
   if (!user) {
     return (
