@@ -38,6 +38,7 @@ app.use(limiter);
 
 // CORS configuration
 const corsOrigins = process.env.CORS_ORIGINS?.split(',') || ['http://localhost:3000'];
+console.log('🌐 CORS Origins:', corsOrigins); // Debug CORS
 app.use(cors({
   origin: corsOrigins,
   credentials: true,
