@@ -79,6 +79,7 @@ interface AuthContextType extends AuthState {
   logout: () => void
   updateUser: (user: User) => void
   updateTokens: (tokens: AuthTokens) => void
+  setUser: (user: User) => void // Alias para updateUser
 }
 
 // Create context
@@ -166,6 +167,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     logout,
     updateUser,
     updateTokens,
+    setUser: updateUser, // Alias para updateUser
   }
 
   return (
