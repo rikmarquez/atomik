@@ -8,7 +8,7 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const { user, setUser } = useAuth()
+  const { user, logout } = useAuth()
   const navigate = useNavigate()
 
   const handleLogout = async () => {
@@ -18,9 +18,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       console.warn('Logout request failed:', error)
     } finally {
       // Clear user state and storage regardless
-      setUser(null)
-      localStorage.removeItem('atomic_user')
-      localStorage.removeItem('atomic_tokens')
+      logout()
       navigate('/')
     }
   }
