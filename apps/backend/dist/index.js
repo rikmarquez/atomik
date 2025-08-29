@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const morgan_1 = __importDefault(require("morgan"));
 const compression_1 = __importDefault(require("compression"));
@@ -34,15 +33,25 @@ const limiter = (0, express_rate_limit_1.default)({
     legacyHeaders: false,
 });
 app.use(limiter);
-// CORS configuration
+// CORS configuration - simplified and more permissive
 const corsOrigins = process.env.CORS_ORIGINS?.split(',') || ['http://localhost:3000'];
 console.log('🌐 CORS Origins:', corsOrigins); // Debug CORS
-app.use((0, cors_1.default)({
-    origin: corsOrigins,
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-}));
+// Enable CORS for all routes
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (origin && corsOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+    }
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    // Handle preflight requests
+    if (req.method === 'OPTIONS') {
+        console.log('🔍 CORS Preflight for:', req.url, 'from:', origin);
+        return res.status(200).end();
+    }
+    next();
+});
 // Body parsing middleware
 app.use(express_1.default.json({ limit: '10mb' }));
 app.use(express_1.default.urlencoded({ extended: true, limit: '10mb' }));
@@ -86,6 +95,7 @@ if (process.env.NODE_ENV !== 'test') {
         console.log(`🚀 Atomic Systems API running on port ${PORT}`);
         console.log(`📚 Environment: ${process.env.NODE_ENV}`);
         console.log(`🗄️ Database: Connected to PostgreSQL`);
+        console.log(`🔄 CORS Debug - Origins: ${JSON.stringify(corsOrigins)}`);
         if (process.env.NODE_ENV === 'development') {
             console.log(`📖 API Docs: http://localhost:${PORT}/api/v1/docs`);
         }

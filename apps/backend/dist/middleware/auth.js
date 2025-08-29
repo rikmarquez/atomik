@@ -7,6 +7,10 @@ const utils_1 = require("../types/utils");
 // Auth middleware to protect routes
 const authMiddleware = (req, res, next) => {
     try {
+        // Skip authentication for OPTIONS requests (CORS preflight)
+        if (req.method === 'OPTIONS') {
+            return next();
+        }
         const authHeader = req.headers.authorization;
         if (!authHeader) {
             throw new error_1.AppError('Authorization header is required', utils_1.HTTP_STATUS.UNAUTHORIZED, 'MISSING_TOKEN');

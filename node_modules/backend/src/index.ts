@@ -43,7 +43,7 @@ console.log('🌐 CORS Origins:', corsOrigins); // Debug CORS
 // Enable CORS for all routes
 app.use((req, res, next) => {
   const origin = req.headers.origin;
-  if (corsOrigins.includes(origin)) {
+  if (origin && corsOrigins.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
   }
   res.header('Access-Control-Allow-Credentials', 'true');
