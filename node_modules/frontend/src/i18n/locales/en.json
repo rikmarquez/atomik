@@ -161,5 +161,53 @@
     "step_3_content": "For each identity area, create systems using the 4 Laws: Make it Obvious, Attractive, Easy, and Satisfying.",
     "get_started": "Get Started",
     "skip_onboarding": "Skip and Go to Dashboard"
+  },
+  "identity_goals": {
+    "title": "Directional Goals",
+    "add_goal": "+ Goal",
+    "new_goal": "New Goal",
+    "edit_goal": "Edit Goal",
+    "no_goals": "No directional goals",
+    "no_goals_description": "Goals provide direction to your systems",
+    "delete_confirm": "Delete goal \"{{title}}\"?",
+    "form": {
+      "title_label": "Goal title",
+      "title_placeholder": "e.g: Weigh 90kg",
+      "description_label": "Optional description",
+      "description_placeholder": "Optional description",
+      "goal_type_label": "Goal Type",
+      "unit_label": "Unit",
+      "unit_placeholder": "Unit (kg, mg/dl, USD)",
+      "target_value_label": "Target value",
+      "target_value_placeholder": "Target value",
+      "current_value_label": "Current value",
+      "current_value_placeholder": "Current value",
+      "target_date_label": "Target date",
+      "creating": "Saving...",
+      "create": "Create",
+      "update": "Update"
+    },
+    "goal_types": {
+      "EXACT": {
+        "label": "Exact",
+        "description": "Reach a specific value"
+      },
+      "ABOVE": {
+        "label": "Minimum",
+        "description": "Exceed a minimum value"
+      },
+      "BELOW": {
+        "label": "Maximum", 
+        "description": "Stay below a value"
+      },
+      "QUALITATIVE": {
+        "label": "Qualitative",
+        "description": "Goal without numeric value"
+      }
+    },
+    "progress": {
+      "update_label": "Update:",
+      "completed": "✅ Completed"
+    }
   }
 }

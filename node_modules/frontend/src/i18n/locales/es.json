@@ -161,5 +161,53 @@
     "step_3_content": "Para cada área de identidad, crea sistemas usando las 4 Leyes: Hazlo Obvio, Atractivo, Fácil y Satisfactorio.",
     "get_started": "Comenzar",
     "skip_onboarding": "Saltar e Ir al Panel"
+  },
+  "identity_goals": {
+    "title": "Metas Direccionales",
+    "add_goal": "+ Meta",
+    "new_goal": "Nueva Meta",
+    "edit_goal": "Editar Meta",
+    "no_goals": "Sin metas direccionales",
+    "no_goals_description": "Las metas dan dirección a tus sistemas",
+    "delete_confirm": "¿Eliminar la meta \"{{title}}\"?",
+    "form": {
+      "title_label": "Título de la meta",
+      "title_placeholder": "ej: Pesar 90kg",
+      "description_label": "Descripción opcional",
+      "description_placeholder": "Descripción opcional",
+      "goal_type_label": "Tipo de Meta",
+      "unit_label": "Unidad",
+      "unit_placeholder": "Unidad (kg, mg/dl, USD)",
+      "target_value_label": "Valor objetivo",
+      "target_value_placeholder": "Valor objetivo",
+      "current_value_label": "Valor actual",
+      "current_value_placeholder": "Valor actual",
+      "target_date_label": "Fecha objetivo",
+      "creating": "Guardando...",
+      "create": "Crear",
+      "update": "Actualizar"
+    },
+    "goal_types": {
+      "EXACT": {
+        "label": "Exacto",
+        "description": "Alcanzar un valor específico"
+      },
+      "ABOVE": {
+        "label": "Mínimo",
+        "description": "Superar un valor mínimo"
+      },
+      "BELOW": {
+        "label": "Máximo",
+        "description": "Mantenerse por debajo de un valor"
+      },
+      "QUALITATIVE": {
+        "label": "Cualitativo",
+        "description": "Meta sin valor numérico"
+      }
+    },
+    "progress": {
+      "update_label": "Actualizar:",
+      "completed": "✅ Completada"
+    }
   }
 }

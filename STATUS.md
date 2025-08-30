@@ -272,6 +272,11 @@
   - Logging detallado en frontend y backend para debugging
   - Relajamiento temporal de validaciones (CUID, datetime, hex color)
   - Error handling mejorado con mensajes específicos de campo
+- ✅ **Refactoring y Limpieza**
+  - Removidos logs de debug temporales
+  - Restauradas validaciones Zod estrictas originales
+  - Implementado formateo de datos correcto en frontend
+  - Conversión de fechas a ISO datetime, colores hex válidos
 
 ### 2025-08-29: Sprint 4 - Internacionalización y UX COMPLETADO ✅ (100%) ✨
 - ✅ **Sistema i18n Completo**
@@ -336,6 +341,9 @@
 8. **TypeScript Interfaces**: Separación clara entre Create/Update data types
 9. **Railway Deployment**: Backend recompila automáticamente, pero dist/ debe committearse
 10. **Component Integration**: Goals como sub-component dentro de areas mantiene jerarquía
+11. **Data Formatting**: Frontend debe formatear datos antes del API call (ISO dates, hex colors)
+12. **Refactoring Strategy**: Debug temporalmente → Identificar problema → Limpiar → Documentar
+13. **Validation Recovery**: Posible restaurar validaciones estrictas ajustando formateo de datos
 
 ### Aprendizajes Clave de Internacionalización (i18n) ✨
 1. **React i18next Stack**: react-i18next + i18next-browser-languagedetector = setup perfecto

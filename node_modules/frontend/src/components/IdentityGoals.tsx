@@ -109,7 +109,7 @@ const IdentityGoals: React.FC<IdentityGoalsProps> = ({
   }
 
   const handleDelete = async (id: string, title: string) => {
-    if (!confirm(`¿Eliminar la meta "${title}"?`)) return
+    if (!confirm(t('identity_goals.delete_confirm', { title }))) return
 
     setLoading(true)
     setError(null)
@@ -204,22 +204,38 @@ const IdentityGoals: React.FC<IdentityGoalsProps> = ({
   }
 
   const goalTypeOptions: { value: GoalType; label: string; description: string }[] = [
-    { value: 'EXACT', label: 'Exacto', description: 'Alcanzar un valor específico' },
-    { value: 'ABOVE', label: 'Mínimo', description: 'Superar un valor mínimo' },
-    { value: 'BELOW', label: 'Máximo', description: 'Mantenerse por debajo de un valor' },
-    { value: 'QUALITATIVE', label: 'Cualitativo', description: 'Meta sin valor numérico' },
+    { 
+      value: 'EXACT', 
+      label: t('identity_goals.goal_types.EXACT.label'), 
+      description: t('identity_goals.goal_types.EXACT.description') 
+    },
+    { 
+      value: 'ABOVE', 
+      label: t('identity_goals.goal_types.ABOVE.label'), 
+      description: t('identity_goals.goal_types.ABOVE.description') 
+    },
+    { 
+      value: 'BELOW', 
+      label: t('identity_goals.goal_types.BELOW.label'), 
+      description: t('identity_goals.goal_types.BELOW.description') 
+    },
+    { 
+      value: 'QUALITATIVE', 
+      label: t('identity_goals.goal_types.QUALITATIVE.label'), 
+      description: t('identity_goals.goal_types.QUALITATIVE.description') 
+    },
   ]
 
   return (
     <div className="mt-4">
       {/* Header */}
       <div className="flex justify-between items-center mb-3">
-        <h4 className="text-sm font-medium text-gray-700">Metas Direccionales</h4>
+        <h4 className="text-sm font-medium text-gray-700">{t('identity_goals.title')}</h4>
         <button
           onClick={() => setShowCreateForm(true)}
           className="text-xs bg-green-50 text-green-600 px-2 py-1 rounded hover:bg-green-100 transition-colors"
         >
-          + Meta
+          {t('identity_goals.add_goal')}
         </button>
       </div>
 
@@ -234,7 +250,7 @@ const IdentityGoals: React.FC<IdentityGoalsProps> = ({
       {showCreateForm && (
         <div className="mb-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
           <h5 className="text-sm font-medium text-gray-900 mb-3">
-            {editingGoal ? 'Editar Meta' : 'Nueva Meta'}
+            {editingGoal ? t('identity_goals.edit_goal') : t('identity_goals.new_goal')}
           </h5>
           
           <form onSubmit={handleCreateOrUpdate} className="space-y-3">
@@ -243,7 +259,7 @@ const IdentityGoals: React.FC<IdentityGoalsProps> = ({
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({...formData, title: e.target.value})}
-                placeholder="Título de la meta (ej: Pesar 90kg)"
+                placeholder={t('identity_goals.form.title_placeholder')}
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
@@ -253,7 +269,7 @@ const IdentityGoals: React.FC<IdentityGoalsProps> = ({
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({...formData, description: e.target.value})}
-                placeholder="Descripción opcional"
+                placeholder={t('identity_goals.form.description_placeholder')}
                 rows={2}
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -280,7 +296,7 @@ const IdentityGoals: React.FC<IdentityGoalsProps> = ({
                     type="text"
                     value={formData.unit}
                     onChange={(e) => setFormData({...formData, unit: e.target.value})}
-                    placeholder="Unidad (kg, mg/dl, USD)"
+                    placeholder={t('identity_goals.form.unit_placeholder')}
                     className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -295,7 +311,7 @@ const IdentityGoals: React.FC<IdentityGoalsProps> = ({
                     step="0.01"
                     value={formData.targetValue || ''}
                     onChange={(e) => setFormData({...formData, targetValue: e.target.value ? Number(e.target.value) : undefined})}
-                    placeholder="Valor objetivo"
+                    placeholder={t('identity_goals.form.target_value_placeholder')}
                     className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -306,7 +322,7 @@ const IdentityGoals: React.FC<IdentityGoalsProps> = ({
                     step="0.01"
                     value={formData.currentValue || ''}
                     onChange={(e) => setFormData({...formData, currentValue: e.target.value ? Number(e.target.value) : undefined})}
-                    placeholder="Valor actual"
+                    placeholder={t('identity_goals.form.current_value_placeholder')}
                     className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -328,14 +344,14 @@ const IdentityGoals: React.FC<IdentityGoalsProps> = ({
                 disabled={loading || !formData.title.trim()}
                 className="bg-green-600 text-white px-4 py-2 text-sm rounded-md hover:bg-green-700 transition-colors disabled:opacity-50"
               >
-                {loading ? 'Guardando...' : editingGoal ? 'Actualizar' : 'Crear'}
+                {loading ? t('identity_goals.form.creating') : editingGoal ? t('identity_goals.form.update') : t('identity_goals.form.create')}
               </button>
               <button
                 type="button"
                 onClick={resetForm}
                 className="bg-gray-300 text-gray-700 px-4 py-2 text-sm rounded-md hover:bg-gray-400 transition-colors"
               >
-                Cancelar
+{t('common.cancel')}
               </button>
             </div>
           </form>
@@ -346,8 +362,8 @@ const IdentityGoals: React.FC<IdentityGoalsProps> = ({
       {goals.length === 0 ? (
         <div className="text-center py-6 text-gray-500">
           <div className="text-2xl mb-2">🎯</div>
-          <p className="text-xs">Sin metas direccionales</p>
-          <p className="text-xs text-gray-400">Las metas dan dirección a tus sistemas</p>
+          <p className="text-xs">{t('identity_goals.no_goals')}</p>
+          <p className="text-xs text-gray-400">{t('identity_goals.no_goals_description')}</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -400,7 +416,7 @@ const IdentityGoals: React.FC<IdentityGoalsProps> = ({
 
                     {/* Quick progress update */}
                     <div className="flex items-center space-x-2">
-                      <span className="text-xs text-gray-600">Actualizar:</span>
+                      <span className="text-xs text-gray-600">{t('identity_goals.progress.update_label')}</span>
                       <input
                         type="number"
                         step="0.01"
@@ -426,7 +442,7 @@ const IdentityGoals: React.FC<IdentityGoalsProps> = ({
 
                 {goal.isAchieved && (
                   <div className="mt-2 inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
-                    ✅ Completada
+                    {t('identity_goals.progress.completed')}
                   </div>
                 )}
               </div>
