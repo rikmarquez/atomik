@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation, useSearchParams } from 'react-router-dom'
 import { atomicSystemsApi, identityAreasApi, handleApiError } from '../services/api'
 import { AtomicSystem, CreateAtomicSystemData, UpdateAtomicSystemData, IdentityArea } from '../types/shared'
 
 const AtomicSystems = () => {
   const { t } = useTranslation()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [atomicSystems, setAtomicSystems] = useState<AtomicSystem[]>([])
   const [identityAreas, setIdentityAreas] = useState<IdentityArea[]>([])
   const [loading, setLoading] = useState(false)
@@ -26,10 +28,25 @@ const AtomicSystems = () => {
     difficulty: 3,
   })
 
-  // Load data on component mount
+  // Handle query parameters and load data on component mount
   useEffect(() => {
+    // Check for query parameters
+    const areaParam = searchParams.get('area')
+    const createParam = searchParams.get('create')
+    
+    if (areaParam) {
+      // Filter by specific area
+      setSelectedAreaFilter(areaParam)
+    }
+    
+    if (createParam) {
+      // Auto-open create form with pre-selected area
+      setFormData(prev => ({ ...prev, identityAreaId: createParam }))
+      setShowCreateForm(true)
+    }
+    
     loadData()
-  }, [])
+  }, [searchParams])
 
   const loadData = async () => {
     setLoading(true)

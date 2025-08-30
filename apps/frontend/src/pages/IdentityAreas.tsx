@@ -295,12 +295,20 @@ const IdentityAreas = () => {
                 />
 
                 <div className="mt-4 pt-4 border-t border-gray-100">
-                  <Link 
-                    to="/atomic-systems" 
-                    className="inline-block bg-green-500 text-white text-sm px-4 py-2 rounded hover:bg-green-600 transition-colors"
-                  >
-                    ⚡ {t('atomic_systems.create_system')}
-                  </Link>
+                  <div className="flex space-x-2">
+                    <Link 
+                      to={`/atomic-systems?area=${area.id}`} 
+                      className="inline-block bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+                    >
+                      👁️ Ver Sistemas
+                    </Link>
+                    <Link 
+                      to={`/atomic-systems?create=${area.id}`} 
+                      className="inline-block bg-green-500 text-white text-sm px-4 py-2 rounded hover:bg-green-600 transition-colors"
+                    >
+                      ⚡ {t('atomic_systems.create_system')}
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
