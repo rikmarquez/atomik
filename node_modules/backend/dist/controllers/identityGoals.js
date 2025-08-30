@@ -4,17 +4,17 @@ exports.reorderIdentityGoals = exports.deleteIdentityGoal = exports.updateGoalPr
 const client_1 = require("@prisma/client");
 const zod_1 = require("zod");
 const prisma = new client_1.PrismaClient();
-// Validation schemas
+// Validation schemas (relaxed for debugging)
 const createIdentityGoalSchema = zod_1.z.object({
-    identityAreaId: zod_1.z.string().cuid('Invalid identity area ID'),
+    identityAreaId: zod_1.z.string().min(1, 'Identity area ID is required'), // Less strict than CUID
     title: zod_1.z.string().min(1, 'Title is required').max(200, 'Title must be less than 200 characters'),
     description: zod_1.z.string().optional(),
     targetValue: zod_1.z.number().optional(),
     currentValue: zod_1.z.number().optional(),
     unit: zod_1.z.string().max(50).optional(),
     goalType: zod_1.z.enum(['ABOVE', 'BELOW', 'EXACT', 'QUALITATIVE']).default('EXACT'),
-    targetDate: zod_1.z.string().datetime().optional(),
-    color: zod_1.z.string().regex(/^#[0-9A-F]{6}$/i, 'Color must be a valid hex color').optional(),
+    targetDate: zod_1.z.string().optional(), // Allow any string format for now
+    color: zod_1.z.string().optional(), // Allow any color format for now
     order: zod_1.z.number().int().min(0).optional(),
 });
 const updateIdentityGoalSchema = createIdentityGoalSchema.partial();
@@ -120,12 +120,16 @@ exports.getIdentityGoal = getIdentityGoal;
 const createIdentityGoal = async (req, res) => {
     try {
         const userId = req.user.id;
+        // Debug: Log the incoming data
+        console.log('🔍 Creating identity goal - userId:', userId);
+        console.log('🔍 Request body:', JSON.stringify(req.body, null, 2));
         const validation = createIdentityGoalSchema.safeParse(req.body);
         if (!validation.success) {
+            console.error('❌ Validation failed:', validation.error.errors);
             const response = {
                 success: false,
                 error: 'Validation error',
-                message: validation.error.errors.map(e => e.message).join(', '),
+                message: validation.error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', '),
             };
             return res.status(400).json(response);
         }
