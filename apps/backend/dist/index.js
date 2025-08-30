@@ -31,8 +31,8 @@ dotenv_1.default.config();
 (0, validation_1.validateEnv)();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3001;
-// Trust proxy for Railway deployment
-app.set('trust proxy', true);
+// Trust proxy for Railway deployment - specific configuration for rate limiting
+app.set('trust proxy', 1);
 // Security middleware
 app.use((0, helmet_1.default)());
 app.use((0, compression_1.default)());

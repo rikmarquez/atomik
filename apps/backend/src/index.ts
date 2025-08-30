@@ -32,8 +32,8 @@ validateEnv();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Trust proxy for Railway deployment
-app.set('trust proxy', true);
+// Trust proxy for Railway deployment - specific configuration for rate limiting
+app.set('trust proxy', 1);
 
 // Security middleware
 app.use(helmet());
