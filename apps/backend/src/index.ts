@@ -80,6 +80,8 @@ app.use('/api/v1/identity-areas', identityAreasRoutes);
 app.use('/api/v1/identity-goals', identityGoalsRoutes);
 app.use('/api/v1/atomic-systems', atomicSystemsRoutes);
 
+console.log('🎯 Identity Goals routes loaded successfully');
+
 // API documentation (development only)
 if (process.env.NODE_ENV === 'development' && process.env.ENABLE_API_DOCS === 'true') {
   app.get('/api/v1/docs', (req, res) => {
