@@ -100,7 +100,14 @@ const IdentityAreas = () => {
   const handleGoalsChange = (areaId: string, updatedGoals: IdentityGoal[]) => {
     setIdentityAreas(areas => areas.map(area => 
       area.id === areaId 
-        ? { ...area, goals: updatedGoals, _count: { ...area._count, goals: updatedGoals.length } }
+        ? { 
+            ...area, 
+            goals: updatedGoals, 
+            _count: { 
+              systems: area._count?.systems || 0,
+              goals: updatedGoals.length 
+            } 
+          }
         : area
     ))
   }
