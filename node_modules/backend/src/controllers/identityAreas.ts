@@ -36,9 +36,31 @@ export const getIdentityAreas = async (req: Request, res: Response) => {
             isActive: true,
           },
         },
+        goals: {
+          where: { isActive: true },
+          select: {
+            id: true,
+            title: true,
+            targetValue: true,
+            currentValue: true,
+            unit: true,
+            goalType: true,
+            targetDate: true,
+            isAchieved: true,
+            color: true,
+            order: true,
+          },
+          orderBy: [
+            { order: 'asc' },
+            { createdAt: 'desc' },
+          ],
+        },
         _count: {
           select: {
             systems: {
+              where: { isActive: true },
+            },
+            goals: {
               where: { isActive: true },
             },
           },

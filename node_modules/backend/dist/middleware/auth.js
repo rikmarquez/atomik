@@ -12,6 +12,13 @@ const authMiddleware = (req, res, next) => {
             return next();
         }
         const authHeader = req.headers.authorization;
+        // Debug logging for identity-goals routes
+        if (req.url?.includes('identity-goals')) {
+            console.log('🔍 Auth Debug - URL:', req.url);
+            console.log('🔍 Auth Debug - Method:', req.method);
+            console.log('🔍 Auth Debug - Auth Header:', authHeader ? 'EXISTS' : 'MISSING');
+            console.log('🔍 Auth Debug - All Headers:', Object.keys(req.headers));
+        }
         if (!authHeader) {
             throw new error_1.AppError('Authorization header is required', utils_1.HTTP_STATUS.UNAUTHORIZED, 'MISSING_TOKEN');
         }

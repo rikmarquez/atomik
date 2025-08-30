@@ -21,7 +21,11 @@
       "Bash(timeout:*)",
       "Bash(PORT=3005 npm run dev)",
       "Bash(npm install:*)",
-      "Bash(railway login:*)"
+      "Bash(railway login:*)",
+      "Bash(AREA_ID=\"cmexoofsw00042s9bxs0r487c\")",
+      "Bash(GOAL_ID=\"cmexooq9d00062s9bfxcsyx7c\")",
+      "Bash(PORT=3006 npm run dev)",
+      "Bash(git log:*)"
     ],
     "deny": [],
     "ask": []
