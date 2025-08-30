@@ -11,8 +11,17 @@ import { validateEnv } from './utils/validation';
 import healthRoutes from './routes/health';
 import authRoutes from './routes/auth';
 import identityAreasRoutes from './routes/identityAreas';
-import identityGoalsRoutes from './routes/identityGoals';
 import atomicSystemsRoutes from './routes/atomicSystems';
+
+// Import identity goals routes with error handling
+let identityGoalsRoutes: any;
+try {
+  identityGoalsRoutes = require('./routes/identityGoals').default;
+  console.log('✅ Identity Goals routes imported successfully');
+} catch (error) {
+  console.error('❌ Failed to import Identity Goals routes:', error);
+  identityGoalsRoutes = null;
+}
 
 // Load environment variables
 dotenv.config();
@@ -77,10 +86,16 @@ if (process.env.NODE_ENV !== 'test') {
 app.use('/api/v1/health', healthRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/identity-areas', identityAreasRoutes);
-app.use('/api/v1/identity-goals', identityGoalsRoutes);
-app.use('/api/v1/atomic-systems', atomicSystemsRoutes);
 
-console.log('🎯 Identity Goals routes loaded successfully');
+// Conditionally load identity goals routes
+if (identityGoalsRoutes) {
+  app.use('/api/v1/identity-goals', identityGoalsRoutes);
+  console.log('🎯 Identity Goals routes loaded successfully');
+} else {
+  console.error('❌ Identity Goals routes not loaded - skipping');
+}
+
+app.use('/api/v1/atomic-systems', atomicSystemsRoutes);
 
 // API documentation (development only)
 if (process.env.NODE_ENV === 'development' && process.env.ENABLE_API_DOCS === 'true') {
