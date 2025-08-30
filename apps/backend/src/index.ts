@@ -11,6 +11,7 @@ import { validateEnv } from './utils/validation';
 import healthRoutes from './routes/health';
 import authRoutes from './routes/auth';
 import identityAreasRoutes from './routes/identityAreas';
+import identityGoalsRoutes from './routes/identityGoals';
 import atomicSystemsRoutes from './routes/atomicSystems';
 
 // Load environment variables
@@ -76,6 +77,7 @@ if (process.env.NODE_ENV !== 'test') {
 app.use('/api/v1/health', healthRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/identity-areas', identityAreasRoutes);
+app.use('/api/v1/identity-goals', identityGoalsRoutes);
 app.use('/api/v1/atomic-systems', atomicSystemsRoutes);
 
 // API documentation (development only)

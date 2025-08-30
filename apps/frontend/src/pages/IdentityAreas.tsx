@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { identityAreasApi, handleApiError } from '../services/api'
-import { IdentityArea, CreateIdentityAreaData, UpdateIdentityAreaData } from '../types/shared'
+import { IdentityArea, CreateIdentityAreaData, UpdateIdentityAreaData, IdentityGoal } from '../types/shared'
+import IdentityGoals from '../components/IdentityGoals'
 
 const IdentityAreas = () => {
   const { t } = useTranslation()
@@ -94,6 +95,14 @@ const IdentityAreas = () => {
     setFormData({ name: '', description: '', color: '#3B82F6' })
     setShowCreateForm(false)
     setEditingArea(null)
+  }
+
+  const handleGoalsChange = (areaId: string, updatedGoals: IdentityGoal[]) => {
+    setIdentityAreas(areas => areas.map(area => 
+      area.id === areaId 
+        ? { ...area, goals: updatedGoals, _count: { ...area._count, goals: updatedGoals.length } }
+        : area
+    ))
   }
 
   const presetColors = [
@@ -261,10 +270,22 @@ const IdentityAreas = () => {
                   <p className="text-gray-600 text-sm mb-4">{area.description}</p>
                 )}
                 
-                <div className="flex items-center justify-between text-sm text-gray-500">
-                  <span>Systems: 0</span>
+                <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
+                  <div className="flex space-x-4">
+                    <span>🎯 {area._count?.goals || 0} metas</span>
+                    <span>⚡ {area._count?.systems || 0} sistemas</span>
+                  </div>
                   <span>{t('common.create')}d {new Date(area.createdAt).toLocaleDateString()}</span>
                 </div>
+
+                {/* Identity Goals Component */}
+                <IdentityGoals
+                  identityAreaId={area.id}
+                  identityAreaName={area.name}
+                  identityAreaColor={area.color}
+                  goals={area.goals || []}
+                  onGoalsChange={(updatedGoals) => handleGoalsChange(area.id, updatedGoals)}
+                />
 
                 <div className="mt-4 pt-4 border-t border-gray-100">
                   <Link 

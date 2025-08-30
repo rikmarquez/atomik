@@ -36,6 +36,12 @@ export interface IdentityArea {
   order: number;
   createdAt: Date;
   updatedAt: Date;
+  systems?: AtomicSystem[];
+  goals?: IdentityGoal[];
+  _count?: {
+    systems: number;
+    goals: number;
+  };
 }
 
 export interface CreateIdentityAreaData {
@@ -46,6 +52,54 @@ export interface CreateIdentityAreaData {
 }
 
 export interface UpdateIdentityAreaData extends Partial<CreateIdentityAreaData> {}
+
+// Identity Goal types
+export type GoalType = 'ABOVE' | 'BELOW' | 'EXACT' | 'QUALITATIVE';
+
+export interface IdentityGoal {
+  id: string;
+  userId: string;
+  identityAreaId: string;
+  title: string;
+  description?: string;
+  targetValue?: number;
+  currentValue?: number;
+  unit?: string;
+  goalType: GoalType;
+  targetDate?: Date;
+  isAchieved: boolean;
+  achievedAt?: Date;
+  color: string;
+  order: number;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  identityArea?: {
+    id: string;
+    name: string;
+    color: string;
+  };
+}
+
+export interface CreateIdentityGoalData {
+  identityAreaId: string;
+  title: string;
+  description?: string;
+  targetValue?: number;
+  currentValue?: number;
+  unit?: string;
+  goalType?: GoalType;
+  targetDate?: string; // ISO string
+  color?: string;
+  order?: number;
+}
+
+export interface UpdateIdentityGoalData extends Partial<Omit<CreateIdentityGoalData, 'identityAreaId'>> {}
+
+export interface UpdateGoalProgressData {
+  currentValue: number;
+  isAchieved?: boolean;
+}
 
 export interface AtomicSystem {
   id: string;
