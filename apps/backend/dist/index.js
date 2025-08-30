@@ -14,6 +14,7 @@ const validation_1 = require("./utils/validation");
 const health_1 = __importDefault(require("./routes/health"));
 const auth_1 = __importDefault(require("./routes/auth"));
 const identityAreas_1 = __importDefault(require("./routes/identityAreas"));
+const identityGoals_1 = __importDefault(require("./routes/identityGoals"));
 const atomicSystems_1 = __importDefault(require("./routes/atomicSystems"));
 // Load environment variables
 dotenv_1.default.config();
@@ -66,7 +67,9 @@ if (process.env.NODE_ENV !== 'test') {
 app.use('/api/v1/health', health_1.default);
 app.use('/api/v1/auth', auth_1.default);
 app.use('/api/v1/identity-areas', identityAreas_1.default);
+app.use('/api/v1/identity-goals', identityGoals_1.default);
 app.use('/api/v1/atomic-systems', atomicSystems_1.default);
+console.log('🎯 Identity Goals routes loaded successfully');
 // API documentation (development only)
 if (process.env.NODE_ENV === 'development' && process.env.ENABLE_API_DOCS === 'true') {
     app.get('/api/v1/docs', (req, res) => {
