@@ -52,12 +52,21 @@ const IdentityGoals: React.FC<IdentityGoalsProps> = ({
     try {
       let updatedGoal: IdentityGoal
       
+      // Debug: Check if we have tokens
+      const tokens = localStorage.getItem('atomic_tokens')
+      console.log('🔍 Debug - Tokens in localStorage:', !!tokens)
+      if (tokens) {
+        const parsed = JSON.parse(tokens)
+        console.log('🔍 Debug - Access token exists:', !!parsed.accessToken)
+      }
+      
       if (editingGoal) {
         // Update existing goal
         const { identityAreaId: _, ...updateData } = formData
         updatedGoal = await identityGoalsApi.update(editingGoal.id, updateData)
       } else {
         // Create new goal
+        console.log('🔍 Debug - Creating goal with data:', formData)
         updatedGoal = await identityGoalsApi.create(formData)
       }
 

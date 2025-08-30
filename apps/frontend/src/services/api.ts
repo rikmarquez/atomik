@@ -63,6 +63,9 @@ api.interceptors.request.use(
   (config) => {
     if (accessToken && config.headers) {
       config.headers.Authorization = `Bearer ${accessToken}`
+      console.log('🔍 Debug - Adding auth header to:', config.url)
+    } else {
+      console.warn('⚠️ Debug - No access token for request:', config.url, { accessToken: !!accessToken })
     }
     return config
   },
