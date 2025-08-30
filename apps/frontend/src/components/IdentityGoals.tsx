@@ -52,26 +52,25 @@ const IdentityGoals: React.FC<IdentityGoalsProps> = ({
     try {
       let updatedGoal: IdentityGoal
       
-      // Debug: Check if we have tokens
-      const tokens = localStorage.getItem('atomic_tokens')
-      console.log('🔍 Debug - Tokens in localStorage:', !!tokens)
-      if (tokens) {
-        const parsed = JSON.parse(tokens)
-        console.log('🔍 Debug - Access token exists:', !!parsed.accessToken)
+      // Prepare data with proper formatting
+      const preparedData = {
+        ...formData,
+        // Convert date to ISO datetime if provided
+        targetDate: formData.targetDate ? new Date(formData.targetDate).toISOString() : undefined,
+        // Ensure color is hex format or default
+        color: formData.color || identityAreaColor,
+        // Remove empty/undefined optional fields
+        description: formData.description?.trim() || undefined,
+        unit: formData.unit?.trim() || undefined,
       }
       
       if (editingGoal) {
         // Update existing goal
-        const { identityAreaId: _, ...updateData } = formData
+        const { identityAreaId: _, ...updateData } = preparedData
         updatedGoal = await identityGoalsApi.update(editingGoal.id, updateData)
       } else {
         // Create new goal
-        console.log('🔍 Debug - Creating goal with data:', formData)
-        console.log('🔍 Debug - formData.identityAreaId:', formData.identityAreaId)
-        console.log('🔍 Debug - formData.targetDate:', formData.targetDate)
-        console.log('🔍 Debug - formData.color:', formData.color)
-        console.log('🔍 Debug - formData.goalType:', formData.goalType)
-        updatedGoal = await identityGoalsApi.create(formData)
+        updatedGoal = await identityGoalsApi.create(preparedData)
       }
 
       // Update goals list
@@ -87,10 +86,6 @@ const IdentityGoals: React.FC<IdentityGoalsProps> = ({
       // Reset form
       resetForm()
     } catch (err) {
-      console.error('🚨 Goal creation error:', err)
-      if (err && typeof err === 'object' && 'response' in err) {
-        console.error('🚨 Response data:', (err as any).response?.data)
-      }
       setError(handleApiError(err))
     } finally {
       setLoading(false)

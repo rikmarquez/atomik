@@ -5,17 +5,17 @@ import { ApiResponse } from '../types'
 
 const prisma = new PrismaClient()
 
-// Validation schemas (relaxed for debugging)
+// Validation schemas
 const createIdentityGoalSchema = z.object({
-  identityAreaId: z.string().min(1, 'Identity area ID is required'), // Less strict than CUID
+  identityAreaId: z.string().cuid('Invalid identity area ID'),
   title: z.string().min(1, 'Title is required').max(200, 'Title must be less than 200 characters'),
   description: z.string().optional(),
   targetValue: z.number().optional(),
   currentValue: z.number().optional(), 
   unit: z.string().max(50).optional(),
   goalType: z.enum(['ABOVE', 'BELOW', 'EXACT', 'QUALITATIVE']).default('EXACT'),
-  targetDate: z.string().optional(), // Allow any string format for now
-  color: z.string().optional(), // Allow any color format for now
+  targetDate: z.string().datetime().optional(),
+  color: z.string().regex(/^#[0-9A-F]{6}$/i, 'Color must be a valid hex color').optional(),
   order: z.number().int().min(0).optional(),
 })
 
@@ -131,15 +131,9 @@ export const getIdentityGoal = async (req: Request, res: Response) => {
 export const createIdentityGoal = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id
-    
-    // Debug: Log the incoming data
-    console.log('🔍 Creating identity goal - userId:', userId)
-    console.log('🔍 Request body:', JSON.stringify(req.body, null, 2))
-    
     const validation = createIdentityGoalSchema.safeParse(req.body)
 
     if (!validation.success) {
-      console.error('❌ Validation failed:', validation.error.errors)
       const response: ApiResponse = {
         success: false,
         error: 'Validation error',
