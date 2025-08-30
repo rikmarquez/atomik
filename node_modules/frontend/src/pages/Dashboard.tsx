@@ -87,8 +87,8 @@ const Dashboard = () => {
           to="/identity-areas" 
           className="bg-blue-500 text-white p-4 rounded-lg hover:bg-blue-600 transition-colors block"
         >
-          <h3 className="font-semibold mb-2">🎯 New Identity Area</h3>
-          <p className="text-sm opacity-90">Define a new life area to focus on</p>
+          <h3 className="font-semibold mb-2">{t('dashboard.new_identity_area')}</h3>
+          <p className="text-sm opacity-90">{t('dashboard.new_identity_area_desc')}</p>
         </Link>
         
         <Link 

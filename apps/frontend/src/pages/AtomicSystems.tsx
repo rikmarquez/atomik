@@ -465,10 +465,10 @@ const AtomicSystems = () => {
                   
                   {/* 4 Laws */}
                   <div className="space-y-2 text-sm">
-                    <div><strong>🎯 Cue:</strong> {system.cue}</div>
-                    <div><strong>💫 Craving:</strong> {system.craving}</div>
-                    <div><strong>⚡ Response:</strong> {system.response}</div>
-                    <div><strong>🎉 Reward:</strong> {system.reward}</div>
+                    <div><strong>🎯 {t('atomic_systems.four_laws_short.cue')}:</strong> {system.cue}</div>
+                    <div><strong>💫 {t('atomic_systems.four_laws_short.craving')}:</strong> {system.craving}</div>
+                    <div><strong>⚡ {t('atomic_systems.four_laws_short.response')}:</strong> {system.response}</div>
+                    <div><strong>🎉 {t('atomic_systems.four_laws_short.reward')}:</strong> {system.reward}</div>
                   </div>
 
                   <div className="mt-4 pt-4 border-t border-gray-100">

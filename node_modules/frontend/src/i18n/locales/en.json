@@ -148,7 +148,13 @@
     "quality_score": "Quality Score",
     "execution_count": "Executions: {{count}}",
     "last_executed": "Last executed: {{date}}",
-    "never_executed": "Never executed"
+    "never_executed": "Never executed",
+    "four_laws_short": {
+      "cue": "Cue",
+      "craving": "Craving",
+      "response": "Response", 
+      "reward": "Reward"
+    }
   },
   "onboarding": {
     "welcome": "Welcome to Atomic Systems! 🚀",

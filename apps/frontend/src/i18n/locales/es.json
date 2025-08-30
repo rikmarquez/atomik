@@ -126,11 +126,11 @@
     "law_1": "1ra Ley - Hazlo Obvio",
     "law_1_placeholder": "¿Cómo harás obvio este hábito? (Señales, disparadores, entorno)",
     "law_2": "2da Ley - Hazlo Atractivo",
-    "law_2_placeholder": "¿Cómo harás atractivo este hábito? (Recompensas, motivación)",
+    "law_2_placeholder": "¿Qué estado esperas lograr?",
     "law_3": "3ra Ley - Hazlo Fácil",
     "law_3_placeholder": "¿Cómo harás fácil este hábito? (Reducir fricción, regla de 2 minutos)",
     "law_4": "4ta Ley - Hazlo Satisfactorio",
-    "law_4_placeholder": "¿Cómo harás satisfactorio este hábito? (Recompensas inmediatas, seguimiento)",
+    "law_4_placeholder": "¿Qué estado lograrás después de actuar?",
     "difficulty": "Nivel de Dificultad",
     "difficulty_easy": "Fácil",
     "difficulty_medium": "Medio",
@@ -148,7 +148,13 @@
     "quality_score": "Puntuación de Calidad",
     "execution_count": "Ejecuciones: {{count}}",
     "last_executed": "Última ejecución: {{date}}",
-    "never_executed": "Nunca ejecutado"
+    "never_executed": "Nunca ejecutado",
+    "four_laws_short": {
+      "cue": "Disparador",
+      "craving": "Deseo",
+      "response": "Acción", 
+      "reward": "Recompensa"
+    }
   },
   "onboarding": {
     "welcome": "¡Bienvenido a Sistemas Atómicos! 🚀",
